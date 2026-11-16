@@ -1,8 +1,10 @@
 # hyperish/docs
 
-하이퍼리쉬(Hyperish) 제품군의 설계·규약 문서 레포입니다.
+하이퍼리쉬(Hyperish) 프레임워크 패밀리의 설계·규약 문서 레포입니다.
 
-첫 제품은 리얼리스틱 그래픽 엔진이고, 이 레포는 그 엔진과 앞으로의 크리에이티브 툴 패밀리(벡터·셰이더·사진 편집) 전체가 따라갈 문서의 뼈대입니다.
+하이퍼리쉬는 4개의 코드 레포로 구성됩니다: **hyper**(개발 프레임워크), **ring**(백엔드), **lace**(웹), **hera**(네이티브). 이 레포의 문서는 특정 제품 하나가 아니라 이 패밀리 전체가 따르는 뼈대이며, DX(개발자 경험)와 응용/개발 계층의 기획을 다룹니다. 개별 제품(첫 제품인 리얼리스틱 그래픽 엔진 포함)의 화면·UX 기획은 이 레포의 범위가 아닙니다.
+
+빌드 에이전트는 [`skills/hyperish-spec/SKILL.md`](skills/hyperish-spec/SKILL.md)를 먼저 읽고 작업에 해당하는 문서를 찾아 적용합니다.
 
 ## 문서 상태 규칙
 
@@ -20,15 +22,15 @@
 
 | 번호 | 문서 | 내용 |
 |---|---|---|
-| 00 | [비전과 제품 방향](docs/00-vision.md) | 하이퍼리쉬가 만드는 것, 첫 제품, 생태계 목표 |
-| 01 | [UX 원칙](docs/01-ux-principles.md) | 모든 제품이 따르는 사용성 원칙 |
-| 02 | [에디터 UX](docs/02-editor-ux.md) | 그래픽 엔진 에디터의 화면 구성과 핵심 작업 흐름 |
-| 03 | [사이트](docs/03-site.md) | 랜딩·문서·갤러리 사이트 구성 |
-| 04 | [디자인 시스템](docs/04-design-system.md) | 토큰, 코어 컴포넌트, 에디터/마케팅 DS 분리 |
-| 05 | [아키텍처](docs/05-architecture.md) | 기술 스택과 Cloudflare 인프라 역할 분담 |
-| 06 | [API 프로토콜 규격](docs/06-api-protocol.md) | HTTP API의 요청/응답·에러·버전닝 규약 |
-| 07 | [실시간 통신 규칙](docs/07-realtime-communication.md) | WebSocket 메시지 규약, 재연결, 동기화 |
-| 08 | [저장·공유·권한](docs/08-storage-sharing.md) | 자동 저장, 공유 단계, 리믹스, 에셋 라이선스 |
+| 00 | [비전과 방향](docs/00-vision.md) | 하이퍼리쉬가 만드는 것, 4개 레포, 확정된 엔지니어링 방향 |
+| 01 | [DX 원칙](docs/01-dx-principles.md) | 프레임워크의 개발자 경험을 설계하는 원칙 |
+| 02 | [hyper: 프레임워크](docs/02-hyper-framework.md) | DSL(proc macro), 코어, 확장 지점, 포크 운영 |
+| 03 | [ring: 백엔드](docs/03-ring-backend.md) | 백엔드 레포의 책임, 구성, 어댑터 연결 |
+| 04 | [lace: 웹](docs/04-lace-web.md) | 웹 레포의 책임과 계획 |
+| 05 | [hera: 네이티브](docs/05-hera-native.md) | 네이티브 레포의 책임과 계획 |
+| 06 | [코어 공통 계약](docs/06-core-contracts.md) | 소유권·수명, 오류·취소·동시성, 어댑터 경계 계약 |
+| 07 | [API 프로토콜 규격](docs/07-api-protocol.md) | HTTP/JSON 어댑터 채택 시의 요청/응답·에러·버전닝 규약 |
+| 08 | [실시간 통신 규칙](docs/08-realtime-communication.md) | WebSocket 어댑터 채택 시의 메시지 규약, 재연결, 동기화 |
 | 09 | [개발 규칙](docs/09-development-rules.md) | 레포 구조, 브랜치, 커밋, PR, 버전닝 |
 | 10 | [네이밍·코딩 컨벤션](docs/10-naming-conventions.md) | 파일, 코드, API, DB, 토큰 네이밍 규칙 |
 | 11 | [열린 결정](docs/11-open-questions.md) | 미정 사항 목록과 결정 절차 |
