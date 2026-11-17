@@ -37,19 +37,20 @@ description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace, hera �
 
 ### 레포
 
-- **hyper** (올인원 개발 프레임워크 & 툴체인 — **Rust/Cargo에 대한 Bun 포지션**): 파편화된 크레이트·빌드 도구를 대체하는 수직 통합 진입점. 프로젝트 `init`·`preview`·`lint`·`test` 등 올인원 개발 환경과 생산성 관리, 상태성(reactivity/state)·직렬화(serialization)·파서(parser)·API 규격 인터페이스 등 배터리 포함(batteries-included) 범용 코어 모듈 내장 (레퍼런스: Bun, Dioxus `rsx!`·매크로).
-- **ring** (백엔드): DB, Cache, MSA, WS/WT 등 백엔드 도메인 전반 (레퍼런스: `loco.rs`).
-- **lace** (웹): DOM/웹 전반 (DX 레퍼런스: Dioxus `rsx!`·매크로, 파이프라인: Leptos, 모바일/웹 UI·브리징: Ionic).
-- **hera** (네이티브 UI): GPU(CPU 폴백 필수) 기반 데스크톱·iOS·Android 네이티브 UI (레퍼런스: GPUI, `anomalyco/rune`). **자체 WebView 절대 사용 금지**이며, 웹뷰가 필요한 경우 `lace`를 사용해 띄우는 호환 어댑터로만 제공한다.
+- **hyper** (올인원 개발 프레임워크 & 툴체인 — **Rust/Cargo에 대한 Bun 포지션**): 파편화된 크레이트·빌드 도구를 대체하는 수직 통합 진입점. 프로젝트 `init`·`preview`·`lint`·`test` 등 올인원 개발 환경과 생산성 관리, 상태성(단일 스레드 고속 경로 + 멀티스레드 `Send + Sync` 경로 이원화)·직렬화·파서·`lace`/`hera` 공통 UI 문법·API 규격 인터페이스 등 배터리 포함(batteries-included) 범용 코어 모듈 내장 (레퍼런스: Bun, QML/Slint, Dioxus `rsx!`, GPUI).
+- **ring** (백엔드): DB, Cache, MSA, WS/WT 및 `lace` 프로덕션 서빙 등 백엔드 도메인 전반 (레퍼런스: `loco.rs`).
+- **lace** (웹): 모든 DOM/웹 기능을 `hyper`/`lace`로 표현해 쉽게 구축하고 DOM으로 출력하는 프레임워크. 최소 CRA 수준의 로컬 프리뷰/데브 서빙을 자체 내장하며, 프로덕션 서빙은 `ring`, 웹뷰 호스팅은 `hera`가 담당한다. `hera`와 **동일한 UI 문법**을 사용한다 (DX 레퍼런스: QML/Slint·Dioxus `rsx!`·GPUI 빌더, 파이프라인: Leptos, 웹 UI: Ionic).
+- **hera** (네이티브 UI): GPU(CPU 폴백 필수) 기반 데스크톱·iOS·Android 네이티브 UI (레퍼런스: GPUI, `anomalyco/rune`, QML/Slint). `lace`와 **동일한 UI 문법**을 사용한다. **자체 WebView 절대 사용 금지**이며, 웹뷰가 필요한 경우 `lace` 출력물을 받아 띄우는 호환 어댑터(`hera` 소속)로만 제공한다.
 
 Rust 기반 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 구조의 Cargo 워크스페이스 모노레포를 따른다(`docs/05-development-rules.md` §1; 비-Rust 전용 레포는 해당 생태계 워크스페이스 구조를 따름). 각 레포의 세부 문서는 해당 레포의 `docs/`(`00-overview.md` ~ `04-open-questions.md`)에서 동일한 구조로 관리한다.
 
 ### 구현 전략
 
 - 코어는 대부분 **Rust**로 작성한다.
-- 처음부터 전부 새로 만들지 않는다. **Rust proc macro로 DSL**을 만들며, **Dioxus의 `rsx!`와 매크로 스타일**을 공통 DX 레퍼런스로 삼는다.
-- 성능 위주의 기존 라이브러리·프레임워크를 **포크한 뒤 unit optimization을 거치거나 기반으로 삼되**, **수직 통합을 위해 `hyper`의 core를 단일 기준(ref)으로 삼아 구현**하고 **그 위에 호환 어댑터를 두는 구조**로 작업한다. 공통 포크 절차는 `docs/05-development-rules.md` §7.
-- **unit optimization의 구체적 의미·범위·도구는 아직 정해지지 않았다 (미정).** 추측해 포크 운영 방식을 정하지 말고, 첫 적용 전에 확인한다.
+- 처음부터 전부 새로 만들지 않는다. **QML 기반 Slint 스타일 및 Dioxus `rsx!` 감각의 proc macro DSL**을 기본 제공하되, **GPUI처럼 DSL 없이도 순수 Rust 빌더·체이닝 가독성이 충분하면 DSL을 강제하지 않는다.**
+- **`lace`(웹)와 `hera`(네이티브)는 같은 UI 문법을 사용**하며, 웹(DOM) 전용 기능이 들어가느냐 네이티브 전용 기능이 들어가느냐에 따라 타깃 기능이 나뉜다.
+- 성능 위주의 기존 라이브러리·프레임워크를 **포크한 뒤 unit optimization을 거치거나 기반으로 삼되**, **수직 통합을 위해 `hyper`의 core를 단일 기준(ref)으로 삼아 구현**하고 **그 위에 호환 어댑터를 두는 구조**로 작업한다.
+- **unit optimization**: (1단계) 포크본에서 불필요한 범용 추상화·미사용 피처를 걷어내고 `hyper` 코어 타입과 무변환·제로카피로 직결하는 수직화를 기본 수행하고, (2단계) 프로파일링으로 확인된 병목 구간에 한해 메모리 레이아웃(Arena/SoA)·SIMD 등 심화 개조로 확장한다(`docs/05-development-rules.md` §7).
 - 포크는 **내부 운영 전략**이다. 외부 개발자에게 포크를 요구하는 기본 경로로 설계하지 않는다.
 
 ### 규약 모델 원칙
@@ -98,5 +99,5 @@ Rust 기반 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 구조�
 - 확정 사항과 충돌하는 리팩터링·구조 변경을 커밋하지 않는다.
 - 명세를 코드에 맞춰 임의로 수정하지 않는다.
 - docs에 제품별·레포별 세부를 쓰거나, 없는 세부를 추측으로 채우지 않는다.
-- unit optimization의 의미를 추측해 포크 운영 방식을 정하지 않는다.
+- unit optimization은 `docs/05-development-rules.md` §7의 단계(1단계: 불필요한 추상화 제거 및 `hyper` 코어 직결 수직화 → 2단계: 병목 확인 구간 심화 개조)를 따르며, 측정 근거 없이 2단계 개조를 선행하지 않는다.
 - 내부 규약의 구체 스택·포맷을 확정된 것처럼 도입하지 않는다.
