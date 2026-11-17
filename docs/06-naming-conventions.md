@@ -1,6 +1,6 @@
 # 06. 네이밍·코딩 컨벤션
 
-> 상태: **제안** · 기준일: 2026-11-16
+> 상태: **제안** · 기준일: 2026-11-17
 
 코드, API, DB, 문서 전반의 이름 규칙입니다. 개발 절차 규칙은 [개발 규칙](05-development-rules.md)을 봅니다. API·DB·메시지 명명 규칙은 언어와 무관하게 적용하고, 코드 규칙은 Rust(§3, 코어 전략상 기본)와 TypeScript(§4, 사용하는 레포)로 나눕니다.
 
@@ -20,7 +20,8 @@
 | Rust 타입·트레이트·열거형 및 배리언트 | PascalCase | `ParseError` |
 | Rust 함수·변수·메서드·모듈·파일 | snake_case | `load_config`, `scene_node.rs` |
 | Rust 상수·static | SCREAMING_SNAKE_CASE | `MAX_RETRIES` |
-| proc macro | snake_case | `#[derive_item]`, `define_item!` |
+| proc macro (derive) | PascalCase (Rust Reference, 2026-11-17 확인: https://doc.rust-lang.org/reference/procedural-macros.html) | `#[derive(MyItem)]` |
+| proc macro (attribute, function-like) | snake_case | `#[my_attr]`, `define_item!` |
 | TypeScript 클래스·컴포넌트·타입 | PascalCase | `ParseError` |
 | TypeScript 함수·변수·메서드 | camelCase | `loadConfig` |
 | 상수 (TS) | SCREAMING_SNAKE_CASE | `MAX_RETRIES` |
@@ -32,7 +33,7 @@
 | DB 컬럼 | 소문자 snake_case, 단수형 | `created_at` |
 | 실시간 메시지 type | `대상.행위` 소문자 | `thing.update` |
 | git 브랜치 | `타입/주제` kebab-case | `feat/dsl-parser` |
-| git 태그·버전 | `v` + SemVer | `v0.3.0` |
+| git 태그·버전 | 단일 레포 릴리스는 `v` + SemVer, 개별 크레이트·패키지 독립 릴리스는 `<이름>-v` + SemVer | `v0.3.0`, `my-crate-v0.3.0` |
 
 ## 2. 식별자(ID)
 
