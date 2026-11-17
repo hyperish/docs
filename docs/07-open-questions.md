@@ -36,6 +36,12 @@
 - 결정: 코어·내부 규약 모델은 표준보다 성능과 수직 통합 생산성이 극대화되는 스택, 외부 호환은 개별 어댑터
   - 날짜: 2026-11-16
   - 영향: docs/00, 02, 03, 04. 구체 스택은 열린 결정 #3
+- 결정: 공통 DX 레퍼런스를 Dioxus(`rsx!` 및 매크로)로 삼고, 모든 레이어는 성능 중심 라이브러리를 포크/기반으로 하되 `hyper`의 core를 단일 기준(ref)으로 수직 통합하고 그 위에 호환 어댑터를 배치
+  - 날짜: 2026-11-17
+  - 영향: docs/00, 01, 02 및 4개 코드 레포(hyper, ring, lace, hera) 문서
+- 결정: 4개 핵심 레포의 세부 도메인과 레퍼런스 확정 — `hyper`(init/preview/lint/test 개발 환경·상태성·직렬화·파서·API 규격 통합), `ring`(DB·Cache·MSA·WS/WT 등 백엔드 전반, 레퍼런스 `loco.rs`), `lace`(DOM/웹 전반, DX: Dioxus `rsx!`, 파이프라인: Leptos, 모바일/웹 UI: Ionic), `hera`(GPU+CPU 폴백 네이티브 UI, 데스크톱·iOS·Android 지원, 자체 WebView 절대 금지 및 필요 시 `lace` 웹뷰 어댑터 제공, 레퍼런스: GPUI·`anomalyco/rune`)
+  - 날짜: 2026-11-17
+  - 영향: docs/00, skills/hyperish-spec 및 각 코드 레포(hyper, ring, lace, hera) 문서
 
 ## 결정을 기록하는 법
 
