@@ -37,7 +37,7 @@ description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace, hera �
 
 ### 레포
 
-- **hyper** (개발 프레임워크 총괄): 프로젝트 `init`·`preview`·`lint`·`test` 등 개발 환경과 생산성 관리, 상태성(reactivity/state)·직렬화(serialization)·파서(parser) 등 범용 코어 모듈, API 규격 인터페이스 통합.
+- **hyper** (올인원 개발 프레임워크 & 툴체인 — **Rust/Cargo에 대한 Bun 포지션**): 파편화된 크레이트·빌드 도구를 대체하는 수직 통합 진입점. 프로젝트 `init`·`preview`·`lint`·`test` 등 올인원 개발 환경과 생산성 관리, 상태성(reactivity/state)·직렬화(serialization)·파서(parser)·API 규격 인터페이스 등 배터리 포함(batteries-included) 범용 코어 모듈 내장 (레퍼런스: Bun, Dioxus `rsx!`·매크로).
 - **ring** (백엔드): DB, Cache, MSA, WS/WT 등 백엔드 도메인 전반 (레퍼런스: `loco.rs`).
 - **lace** (웹): DOM/웹 전반 (DX 레퍼런스: Dioxus `rsx!`·매크로, 파이프라인: Leptos, 모바일/웹 UI·브리징: Ionic).
 - **hera** (네이티브 UI): GPU(CPU 폴백 필수) 기반 데스크톱·iOS·Android 네이티브 UI (레퍼런스: GPUI, `anomalyco/rune`). **자체 WebView 절대 사용 금지**이며, 웹뷰가 필요한 경우 `lace`를 사용해 띄우는 호환 어댑터로만 제공한다.
