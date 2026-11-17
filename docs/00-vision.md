@@ -12,7 +12,7 @@
 
 | 레포 | 역할 | 주요 범위 및 레퍼런스 |
 |---|---|---|
-| **hyper** | 개발 프레임워크 총괄 | 프로젝트 `init`·`preview`·`lint`·`test` 등 개발 환경·생산성 관리, 상태성·직렬화·파서 등 범용 코어 모듈, API 규격 인터페이스 수직 통합 (DX 레퍼런스: Dioxus 매크로/CLI) |
+| **hyper** | 올인원 개발 프레임워크 & 툴체인 | **Rust/Cargo 생태계에 대한 Bun 포지션.** 프로젝트 `init`·`preview`·`lint`·`test`·`build` 등 개발 환경·생산성 올인원 통합, 상태성·직렬화·파서·API 규격 인터페이스 등 배터리 포함(batteries-included) 범용 코어 모듈 (레퍼런스: **Bun**, **Dioxus** `rsx!`·매크로/CLI) |
 | **ring** | 백엔드 | DB, Cache, MSA, WS/WT 등 백엔드 도메인 전반 (레퍼런스: `loco.rs`) |
 | **lace** | 웹 (DOM/Web) | DOM/웹 전반, 선언적 뷰·반응성·SSR/CSR 파이프라인 및 크로스플랫폼 웹 UI (DX 레퍼런스: Dioxus `rsx!`, 파이프라인: Leptos, 모바일/웹 UI·브리징: Ionic) |
 | **hera** | 네이티브 UI | GPU(CPU 폴백 필수) 기반 데스크톱·iOS·Android 네이티브 UI. **자체 WebView 절대 미사용**, 웹뷰 필요 시 `lace` 기반 어댑터로 제공 (레퍼런스: GPUI, `anomalyco/rune`) |
