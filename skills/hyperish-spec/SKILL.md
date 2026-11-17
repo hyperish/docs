@@ -37,13 +37,18 @@ description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace, hera �
 
 ### 레포
 
-hyper(개발 프레임워크), ring(백엔드), lace(웹), hera(네이티브). Rust 기반 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 구조의 Cargo 워크스페이스 모노레포를 따른다(`docs/05-development-rules.md` §1; 비-Rust 전용 레포는 해당 생태계 워크스페이스 구조를 따름). 레포 간 관계와 세부 크레이트 구성은 각 레포 문서가 정한다.
+- **hyper** (개발 프레임워크 총괄): 프로젝트 `init`·`preview`·`lint`·`test` 등 개발 환경과 생산성 관리, 상태성(reactivity/state)·직렬화(serialization)·파서(parser) 등 범용 코어 모듈, API 규격 인터페이스 통합.
+- **ring** (백엔드): DB, Cache, MSA, WS/WT 등 백엔드 도메인 전반 (레퍼런스: `loco.rs`).
+- **lace** (웹): DOM/웹 전반 (DX 레퍼런스: Dioxus `rsx!`·매크로, 파이프라인: Leptos, 모바일/웹 UI·브리징: Ionic).
+- **hera** (네이티브 UI): GPU(CPU 폴백 필수) 기반 데스크톱·iOS·Android 네이티브 UI (레퍼런스: GPUI, `anomalyco/rune`). **자체 WebView 절대 사용 금지**이며, 웹뷰가 필요한 경우 `lace`를 사용해 띄우는 호환 어댑터로만 제공한다.
+
+Rust 기반 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 구조의 Cargo 워크스페이스 모노레포를 따른다(`docs/05-development-rules.md` §1; 비-Rust 전용 레포는 해당 생태계 워크스페이스 구조를 따름). 각 레포의 세부 문서는 해당 레포의 `docs/`(`00-overview.md` ~ `04-open-questions.md`)에서 동일한 구조로 관리한다.
 
 ### 구현 전략
 
 - 코어는 대부분 **Rust**로 작성한다.
-- 처음부터 전부 새로 만들지 않는다. **Rust proc macro로 DSL**을 만든다.
-- 기존 라이브러리나 생태계 코어를 **포크한 뒤 unit optimization을 거치는** 방식으로 운영한다. 공통 절차는 `docs/05-development-rules.md` §7.
+- 처음부터 전부 새로 만들지 않는다. **Rust proc macro로 DSL**을 만들며, **Dioxus의 `rsx!`와 매크로 스타일**을 공통 DX 레퍼런스로 삼는다.
+- 성능 위주의 기존 라이브러리·프레임워크를 **포크한 뒤 unit optimization을 거치거나 기반으로 삼되**, **수직 통합을 위해 `hyper`의 core를 단일 기준(ref)으로 삼아 구현**하고 **그 위에 호환 어댑터를 두는 구조**로 작업한다. 공통 포크 절차는 `docs/05-development-rules.md` §7.
 - **unit optimization의 구체적 의미·범위·도구는 아직 정해지지 않았다 (미정).** 추측해 포크 운영 방식을 정하지 말고, 첫 적용 전에 확인한다.
 - 포크는 **내부 운영 전략**이다. 외부 개발자에게 포크를 요구하는 기본 경로로 설계하지 않는다.
 
