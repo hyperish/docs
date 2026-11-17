@@ -37,7 +37,7 @@ description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace, hera �
 
 ### 레포
 
-hyper(개발 프레임워크), ring(백엔드), lace(웹), hera(네이티브). 레포 간 관계와 내부 구조는 docs가 정하지 않는다.
+hyper(개발 프레임워크), ring(백엔드), lace(웹), hera(네이티브). 각 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 구조의 Rust 모노레포(Cargo 워크스페이스)를 따른다(`docs/05-development-rules.md` §1). 레포 간 관계와 세부 크레이트 구성은 각 레포 문서가 정한다.
 
 ### 구현 전략
 
