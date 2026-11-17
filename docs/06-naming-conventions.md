@@ -15,10 +15,10 @@
 
 | 대상 | 규칙 | 예시 |
 |---|---|---|
-| 파일·디렉터리 | 소문자 kebab-case | `api-protocol.md` |
+| 파일·디렉터리 (문서, 설정, 일반 모듈) | 소문자 kebab-case (단, Rust 소스 파일은 `snake_case.rs`, TS 컴포넌트 파일은 `PascalCase.tsx`) | `api-protocol.md`, `config-loader.ts` |
 | Rust 크레이트 | 소문자 kebab-case (Cargo), snake_case (코드 내) | `my-crate` / `my_crate` |
-| Rust 타입·트레이트·열거형 | PascalCase | `ParseError` |
-| Rust 함수·변수·메서드·모듈 | snake_case | `load_config` |
+| Rust 타입·트레이트·열거형 및 배리언트 | PascalCase | `ParseError` |
+| Rust 함수·변수·메서드·모듈·파일 | snake_case | `load_config`, `scene_node.rs` |
 | Rust 상수·static | SCREAMING_SNAKE_CASE | `MAX_RETRIES` |
 | proc macro | snake_case | `#[derive_item]`, `define_item!` |
 | TypeScript 클래스·컴포넌트·타입 | PascalCase | `ParseError` |
@@ -40,7 +40,8 @@
 
 ## 3. Rust
 
-- 표준 라이브러리와 rustfmt 기본 규칙을 따릅니다.
+- 표준 라이브러리와 rustfmt 기본 규칙, Rust API Guidelines(`RFC 430`)를 따릅니다.
+- 변환 메서드는 비용과 소유권에 따라 `as_`(무비용 참조 변환), `to_`(할당·복사 변환), `into_`(소유권 소비 변환) 접두어를 구분합니다.
 - `unsafe`는 꼭 필요한 곳에만 쓰고, 쓰는 곳마다 안전성 근거를 주석으로 남깁니다.
 - proc macro 크레이트는 `proc-macro = true` 전용 크레이트로 분리하고, 사용자 노출은 진입 크레이트의 재수출로 통일합니다.
 - DSL 키워드·매크로 이름은 짧은 일반어를 우선하되, 생태계 관례와 충돌하지 않게 합니다.
@@ -49,7 +50,7 @@
 
 - 타입·인터페이스는 PascalCase, 제네릭 파라미터는 단일 대문자 또는 PascalCase(`T`, `TValue`).
 - 불리언은 `is`/`has`/`can` 접두어 (`isPublic`, `hasLicense`).
-- 파일은 한 책임 하나. 컴포넌트 파일명은 컴포넌트 이름과 같게 합니다.
+- 파일은 한 책임 하나. 일반 TS 모듈 파일은 `kebab-case.ts`로 짓고, 컴포넌트 파일명만 컴포넌트 이름과 같은 `PascalCase.tsx`로 짓습니다.
 
 ## 5. 명명할 때 피할 것
 
