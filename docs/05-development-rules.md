@@ -14,7 +14,7 @@ apps/        # 실행 가능한 애플리케이션·바이너리·서비스 엔�
 crates/      # 코어 라이브러리, proc-macro DSL, SDK, 내부 포크·최적화 크레이트
 ```
 
-- 범용 명세는 이 레포(`hyperish/docs`)에 두고, 레포별 세부 설계 문서는 각 코드 레포에 둡니다.
+- 범용 명세는 이 레포(`hyperish/docs`)에 두고, 레포별 세부 설계 문서는 각 코드 레포의 `docs/`에 동일한 구조(`00-overview`, `01-dx-and-dsl`, `02-architecture`, `03-adapters-and-pipeline`, `04-open-questions`)로 둡니다.
 - 각 레포와 공개 크레이트는 독립된 버전·독립 태그로 배포합니다.
 
 ## 2. 브랜치
