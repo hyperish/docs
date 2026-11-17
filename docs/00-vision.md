@@ -12,10 +12,10 @@
 
 | 레포 | 역할 | 주요 범위 및 레퍼런스 |
 |---|---|---|
-| **hyper** | 올인원 개발 프레임워크 & 툴체인 | **Rust/Cargo 생태계에 대한 Bun 포지션.** 프로젝트 `init`·`preview`·`lint`·`test`·`build` 등 개발 환경·생산성 올인원 통합, 상태성·직렬화·파서·API 규격 인터페이스 등 배터리 포함(batteries-included) 범용 코어 모듈 (레퍼런스: **Bun**, **Dioxus** `rsx!`·매크로/CLI) |
-| **ring** | 백엔드 | DB, Cache, MSA, WS/WT 등 백엔드 도메인 전반 (레퍼런스: `loco.rs`) |
-| **lace** | 웹 (DOM/Web) | DOM/웹 전반, 선언적 뷰·반응성·SSR/CSR 파이프라인 및 크로스플랫폼 웹 UI (DX 레퍼런스: Dioxus `rsx!`, 파이프라인: Leptos, 모바일/웹 UI·브리징: Ionic) |
-| **hera** | 네이티브 UI | GPU(CPU 폴백 필수) 기반 데스크톱·iOS·Android 네이티브 UI. **자체 WebView 절대 미사용**, 웹뷰 필요 시 `lace` 기반 어댑터로 제공 (레퍼런스: GPUI, `anomalyco/rune`) |
+| **hyper** | 올인원 개발 프레임워크 & 툴체인 | **Rust/Cargo 생태계에 대한 Bun 포지션.** 프로젝트 `init`·`preview`·`lint`·`test`·`build` 등 개발 환경·생산성 올인원 통합, 상태성·직렬화·파서·공통 UI 문법·API 규격 인터페이스 등 배터리 포함(batteries-included) 범용 코어 모듈 (레퍼런스: **Bun**, **Dioxus**, **QML/Slint**, **GPUI**) |
+| **ring** | 백엔드 | DB, Cache, MSA, WS/WT 및 `lace` 웹 빌드 프로덕션 서빙 등 백엔드 도메인 전반 (레퍼런스: `loco.rs`) |
+| **lace** | 웹 (DOM/Web) | 모든 DOM/웹 기능을 `hyper`/`lace`로 쉽게 표현해 DOM으로 출력, CRA 수준의 로컬 프리뷰·데브 서빙 내장. `hera`와 **동일한 UI 문법** 공유 (DX 레퍼런스: QML/Slint·Dioxus `rsx!`·GPUI 빌더, 파이프라인: Leptos, 웹 UI: Ionic) |
+| **hera** | 네이티브 UI | GPU(CPU 폴백 필수) 기반 데스크톱·iOS·Android 네이티브 UI. `lace`와 **동일한 UI 문법** 공유. **자체 WebView 절대 미사용**, 웹뷰가 필요한 경우 `lace` 출력물을 띄우는 어댑터(`hera` 소속)로 제공 (레퍼런스: GPUI, `anomalyco/rune`, QML/Slint) |
 
 이 표는 어떤 레포가 있는지 찾기 위한 공통 기준입니다. 각 레포의 세부 설계는 해당 코드 레포의 `docs/`에서 동일한 문서 구조(`00-overview` ~ `04-open-questions`)로 다룹니다.
 
@@ -24,9 +24,10 @@
 ### 구현 전략
 
 - 코어는 대부분 **Rust**로 작성하며, Rust 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 구조의 모노레포(Cargo 워크스페이스)로 운영합니다(비-Rust 전용 레포는 해당 생태계 구조를 따름).
-- 처음부터 전부 새로 만들지 않습니다. **Rust proc macro로 DSL**을 만들며, 읽기 쉽고 직관적인 **Dioxus의 `rsx!`와 매크로 스타일**을 공통 DX 레퍼런스로 삼습니다.
-- 성능 위주의 검증된 라이브러리·프레임워크를 **포크하거나 기반으로 삼되 (`unit optimization` 적용)**, **수직 통합을 위해 `hyper`의 core를 단일 기준(ref)으로 삼아 구현**하고 **그 위에 호환 어댑터를 두는 구조**로 작업합니다. 공통 포크 절차는 [05-development-rules](05-development-rules.md) §7입니다.
-- unit optimization의 구체적 의미·범위·도구는 아직 설명되지 않았습니다(**미정**, [열린 결정](07-open-questions.md)).
+- 처음부터 전부 새로 만들지 않습니다. 선언적 DSL(**QML 기반 Slint 스타일** 및 **Dioxus `rsx!`·매크로**)을 기본 제공하되, **GPUI처럼 DSL 없이 순수 Rust 빌더·체이닝만으로도 가독성이 충분하면 DSL을 쓰지 않아도 되도록** 설계합니다.
+- **웹(`lace`)과 네이티브(`hera`)는 동일한 UI 문법을 사용**하며, 거기에 웹(DOM) 전용 기능이 들어가느냐 네이티브 전용 기능이 들어가느냐에 따라 타깃 기능이 나뉩니다.
+- 성능 위주의 검증된 라이브러리·프레임워크를 **포크하거나 기반으로 삼되 (`unit optimization` 적용)**, **수직 통합을 위해 `hyper`의 core를 단일 기준(ref)으로 삼아 구현**하고 **그 위에 호환 어댑터를 두는 구조**로 작업합니다.
+- **unit optimization 운영 방식**: 우선 **(1단계) 범용 추상화·미사용 피처를 걷어내고 `hyper` 코어 타입과 무변환·제로카피로 직결하는 수직화**를 기본 적용하며, **(2단계) 병목이 확인된 핫패스에 한해 메모리 레이아웃(Arena/SoA)·SIMD 등 심화 개조**로 확장할 여지를 둡니다. 공통 포크 절차는 [05-development-rules](05-development-rules.md) §7입니다.
 
 ### 규약 모델 원칙
 
