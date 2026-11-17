@@ -17,6 +17,7 @@
 | 날짜·시각 | RFC 3339 / ISO 8601, UTC |
 | ID | 외부에 노출하는 ID는 불투명한 문자열. 순서 가능한 ID(ULID 등)를 권장하며, 자동 증가 정수는 노출하지 않음 |
 | 바이너리 | JSON 본문에 넣지 않음. 대용량 전송 원칙은 [02-core-contracts](02-core-contracts.md) §7 |
+| Content-Type | 요청·응답 모두 `application/json; charset=utf-8` |
 
 ## 2. URL 설계
 
@@ -28,7 +29,7 @@
 ## 3. 인증과 권한
 
 - 인증 방식은 클라이언트 종류에 맞춰 고르되, 자격 증명을 URL에 싣지 않습니다.
-- 브라우저처럼 자격 증명이 자동 전송되는 클라이언트는 상태를 바꾸는 요청에 **CSRF 방어**를 둡니다. 세션 쿠키는 HttpOnly·Secure·SameSite를 설정합니다.
+- 브라우저처럼 자격 증명이 자동 전송되는 클라이언트는 상태를 바꾸는 요청(POST/PATCH/DELETE)에 **CSRF 방어**를 둡니다. 세션 쿠키는 HttpOnly·Secure·SameSite를 설정하고, 세션 생성·조회 응답 본문으로 내려준 CSRF 토큰을 클라이언트가 `X-CSRF-Token` 헤더로 보내 검증합니다.
 - 토큰 방식은 범위(scope)를 제한하고 개별 폐기가 가능해야 하며, 클라이언트는 이를 보안 저장소에 보관합니다.
 - 권한 검사와 철회 원칙은 [02-core-contracts](02-core-contracts.md) §6을 따릅니다.
 - CORS는 허용한 Origin만 엽니다. `*`는 쓰지 않습니다.
@@ -62,7 +63,7 @@
   - 같은 키와 같은 본문의 재요청은 부수효과를 반복하지 않고 처음 응답을 돌려줍니다.
   - 같은 키에 다른 본문이 오면 `409 idempotency_key_mismatch`입니다.
   - 같은 키 요청이 처리 중이면 `409 request_in_progress`와 `Retry-After`를 돌려줍니다.
-- 수정이 필요한 대상은 `version`을 가지고, 수정 요청이 기대 버전을 함께 보내 다르면 `409 version_conflict`입니다(낙관적 잠금).
+- 수정이 필요한 대상은 `version`(정수)을 가지고, 수정 요청 본문에 기대 버전(`expectedVersion`)을 함께 보내 서버의 현재 버전과 다르면 `409 version_conflict`입니다(낙관적 잠금).
 
 ## 7. 버전닝
 
@@ -73,4 +74,4 @@
 
 ## 8. 속도 제한
 
-- 속도 제한을 두는 경우 응답 헤더 `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset`을 제공합니다. 수치는 구현이 정합니다.
+- 속도 제한을 두는 경우 응답 헤더 `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset`(`Reset`은 리셋까지 남은 초 단위 정수, delta-seconds)을 제공합니다. 수치는 구현이 정합니다.
