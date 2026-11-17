@@ -23,7 +23,7 @@
 
 ### 구현 전략
 
-- 코어는 대부분 **Rust**로 작성합니다.
+- 코어는 대부분 **Rust**로 작성하며, 각 프로젝트 레포는 개별 레포 단위로 `apps/`, `crates/` 구조의 모노레포(Cargo 워크스페이스)로 운영합니다.
 - 처음부터 전부 새로 만들지 않습니다. **Rust proc macro로 DSL**을 만듭니다.
 - 기존 라이브러리나 생태계 코어를 **포크한 뒤 unit optimization을 거치는** 방식으로 운영합니다. 공통 절차는 [05-development-rules](05-development-rules.md) §7입니다.
 - unit optimization의 구체적 의미·범위·도구는 아직 설명되지 않았습니다(**미정**, [열린 결정](07-open-questions.md)).
