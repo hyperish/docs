@@ -1,6 +1,6 @@
 # 03. HTTP/JSON 어댑터 규약
 
-> 상태: **제안** · 기준일: 2026-11-16
+> 상태: **제안** · 기준일: 2026-11-17
 
 외부 호환 어댑터 중 **HTTP/JSON 어댑터를 채택하는 경우** 그 어댑터가 따르는 공통 규약입니다. 외부 호환이 반드시 HTTP/JSON인 것은 아닙니다. 코어·내부 규약 모델은 표준보다 성능과 수직 통합 생산성을 우선하는 스택을 쓰고([00-vision](00-vision.md)의 규약 모델 원칙), 외부 호환은 개별 어댑터로 해결하며, 이 문서는 그 어댑터 중 하나의 규약 제안입니다. 어댑터의 공통 계약은 [02-core-contracts](02-core-contracts.md) §5~§7을 따릅니다.
 
@@ -11,13 +11,13 @@
 | 항목 | 규약 |
 |---|---|
 | 전송 | HTTPS only. 평문 HTTP는 거부 |
-| 본문 포맷 | JSON, UTF-8 |
+| 본문 포맷 | JSON, UTF-8 인코딩 (RFC 8259, 2026-11-17 확인: https://www.rfc-editor.org/rfc/rfc8259.html) |
 | 필드명 | `camelCase` |
 | 경로명 | 소문자 `kebab-case` |
 | 날짜·시각 | RFC 3339 / ISO 8601, UTC |
 | ID | 외부에 노출하는 ID는 불투명한 문자열. 순서 가능한 ID(ULID 등)를 권장하며, 자동 증가 정수는 노출하지 않음 |
 | 바이너리 | JSON 본문에 넣지 않음. 대용량 전송 원칙은 [02-core-contracts](02-core-contracts.md) §7 |
-| Content-Type | 요청·응답 모두 `application/json; charset=utf-8` |
+| Content-Type | 요청·응답 모두 `application/json` (RFC 8259상 charset 파라미터는 미정의이므로 필수로 요구하지 않음) |
 
 ## 2. URL 설계
 
