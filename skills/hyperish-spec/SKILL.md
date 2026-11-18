@@ -10,95 +10,42 @@ description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace 레포)
 ## 명세 소스와 경로 해석
 
 - 범용 명세의 단일 원천: **https://github.com/hyperish/docs** (public).
-- 이 스킬에 적힌 문서 경로(`docs/...`)는 **docs 저장소 루트 기준**이다. 스킬 파일 위치 기준 상대 경로가 아니다.
-- 이 스킬이 docs 저장소 밖(코드 레포 등)에 설치된 경우, 명세는 `git clone https://github.com/hyperish/docs`로 받거나 raw URL(`https://raw.githubusercontent.com/hyperish/docs/<revision>/docs/00-vision.md` 형식)로 읽는다.
+- 이 스킬에 적힌 문서 경로(`docs/...`)는 **docs 저장소 루트 기준**이다.
 - 명세 내용을 다른 파일에 복사해 두지 않는다. 항상 원천 저장소에서 읽는다.
 
 ## docs가 다루는 것과 다루지 않는 것
 
-- docs는 **모든 제품과 레포가 공유하는 추상 계약과 공통 규칙**이다.
-- 특정 제품의 설계·사례나 특정 코드 레포의 구조·책임·구현 세부는 docs에 없다. 각 제품·레포의 문서에 있다.
-- 필요한 세부가 docs에 없다고 지어내거나 docs 내용을 특정 제품·레포 사정으로 해석해 확장하지 않는다. 그 세부 문서도 없으면 멈추고 멈추고 리뷰어에게 확인을 요청한다.
-- docs에 제품별·레포별 세부를 새로 쓰지 않는다. 문서 변경은 리뷰 승인 후 문서 단위 커밋으로 한다.
+- `hyperish/docs`는 **모든 제품과 레포가 공유하는 추상 계약과 공통 규칙**이다.
+- 특정 제품의 설계나 특정 코드 레포(`hyper`, `ring`, `lace`)의 세부 도메인·레퍼런스·크레이트 구조는 해당 레포의 `docs/00-overview.md` ~ `04-open-questions.md`에 있다.
+- 필요한 세부가 문서에 없다고 지어내지 않는다. 미정 사항이나 설계 변경은 먼저 브리핑하고 리뷰 승인을 받은 뒤에만 반영한다.
 
 ## 명세 revision 고정 (재현성)
 
-- 작업을 시작할 때 명세의 **커밋 SHA를 기록**하고(예: `git -C docs rev-parse HEAD`, 또는 GitHub API로 main의 SHA 조회), 그 revision 기준으로 문서를 읽는다.
-- 작업 결과물(PR 설명, 커밋 메시지 본문 등)에 **적용한 명세 revision을 남긴다.**
-- main의 최신 변경을 맹목적으로 따라가지 않는다. revision 갱신은 작업 단위로 의식적으로 하고, 바뀐 상태(확정/제안/미정)를 다시 확인한다.
+- 작업을 시작할 때 `hyperish/docs`의 **커밋 SHA를 기록**하고(`git -C docs rev-parse HEAD`), 작업 결과물(PR 설명, 커밋 메시지 본문 `Spec-Revision: hyperish/docs@<SHA>`)에 남긴다.
 
 ## 문서 상태 규칙 (가장 먼저 적용)
 
-- **확정**: 명시적으로 결정된 사실. 확정과 충돌하는 구조·코드를 작성하거나 제안하지 않는다. 바꾸려면 리뷰 승인과 새 결정 기록이 필요하다.
-- **제안**: 따르되, 더 나은 대안이 있으면 근거와 함께 제시할 수 있다. 제안을 확정인 것처럼 후속 설계의 전제로 쌓지 않는다.
-- **미정**: 임의로 정하지 않는다. `docs/07-open-questions.md`를 확인하고, 작업이 미정 사항에 걸리면 멈추고 리뷰어에게 확인을 요청한다.
-
-## 확정 엔지니어링 방향 (2026-11-18)
-
-### 레포
-
-- **hyper** (올인원 개발 프레임워크 & 툴체인 — **Rust/Cargo에 대한 Bun 포지션**): 웹·서버에 국한되지 않는 범용 개발 플랫폼이자 수직 통합 진입점. 프로젝트 `init`·`preview`·`lint`·`test`·`build` 등 올인원 개발 환경과 생산성 관리, 상태성(`signal`, 단일 스레드 고속 경로 + 멀티스레드 `Send + Sync` 경로 이원화)·직렬화·파서·Validation·범용 스키마·공통 UI 문법·규격 인터페이스 등 기본 내장(batteries-included) 범용 코어 모듈 내장 (레퍼런스: Bun, QML/Slint, Dioxus `rsx!`, GPUI).
-- **ring** (백엔드): **Rust 스타일 컴포넌트(Component) 조립식 백엔드 아키텍처.** 고정된 폴더 구조를 강제하지 않고 `provide`·`wrap`(Middleware/AuthGuard)·라우트·워커·실시간 룸을 컴포넌트 단위로 묶어 조립한다. DB/ORM 쿼리, Cache, Middleware, Auth, MSA, WS/WT, Swagger/OpenAPI 자동 서빙, 인메모리 `TestClient`, `lace` 웹 프로덕션 서빙 등 백엔드 도메인 전반을 다룬다 (레퍼런스: `loco.rs`).
-- **lace** (웹·네이티브 통합 크로스플랫폼 UI): **단일 UI 문법과 컴포넌트 아키텍처**로 웹(DOM)과 네이티브(GPU/CPU)를 모두 다루는 통합 UI 프레임워크 (DX 레퍼런스: QML/Slint·Dioxus `rsx!`·GPUI 빌더).
-  - **Web 타깃**: 모든 DOM/웹 기능을 `hyper`/`lace`로 표현해 쉽게 구축하고 DOM으로 출력. 최소 CRA 수준의 로컬 프리뷰/데브 서빙을 자체 내장하며 프로덕션 서빙은 `ring`이 담당한다 (파이프라인: Leptos, 웹 UI: Ionic).
-  - **Native 타깃**: GPU(CPU 폴백 필수) 기반 데스크톱·iOS·Android 네이티브 UI (레퍼런스: GPUI, `anomalyco/rune`). **네이티브 UI에 WebView 절대 사용 금지**이며, 웹뷰가 꼭 필요한 경우에만 `lace` 내 옵트인 웹뷰 서피스 어댑터(`lace-adapter-webview`)로 웹 타깃 출력을 띄운다.
-
-Rust 기반 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 구조의 Cargo 워크스페이스 모노레포를 따른다(`docs/05-development-rules.md` §1; 비-Rust 전용 레포는 해당 생태계 워크스페이스 구조를 따름). 각 레포의 세부 문서는 해당 레포의 `docs/`(`00-overview.md` ~ `04-open-questions.md`)에서 동일한 구조로 관리한다.
-
-### 구현 전략
-
-- 코어는 대부분 **Rust**로 작성한다.
-- 처음부터 전부 새로 만들지 않는다. **DSL(QML/Slint 스타일, Dioxus `rsx!` 등 proc macro)을 채택하는 이유는 오직 개발 생산성 때문**이다. 생산성과 가독성이 충족되거나 더 효율적인 방법(GPUI식 순수 Rust 빌더·체이닝, 코드젠 등)이 있다면 **그 어떤 방법을 사용해도 무관**하다.
-- **`lace` 안에서 웹(DOM) 타깃과 네이티브(GPU/CPU) 타깃은 같은 UI 문법을 사용**하며, 웹(DOM) 전용 기능이 들어가느냐 네이티브 전용 기능이 들어가느냐에 따라 타깃 기능이 나뉜다.
-- 성능 위주의 기존 라이브러리·프레임워크를 **포크한 뒤 unit optimization을 거치거나 기반으로 삼되**, **수직 통합을 위해 `hyper`의 core를 단일 기준(ref)으로 삼아 구현**하고 **그 위에 호환 어댑터를 두는 구조**로 작업한다.
-- **unit optimization**: (1단계) 포크본에서 불필요한 범용 추상화·미사용 피처를 걷어내고 `hyper` 코어 타입과 무변환·제로카피로 직결하는 수직화를 기본 수행하고, (2단계) 프로파일링으로 확인된 병목 구간에 한해 메모리 레이아웃(Arena/SoA)·SIMD 등 심화 개조로 확장한다(`docs/05-development-rules.md` §7).
-- 포크는 **내부 운영 전략**이다. 외부 개발자에게 포크를 요구하는 기본 경로로 설계하지 않는다.
-
-### 규약 모델 원칙
-
-- 코어와 내부 규약 모델은 **표준 준수보다 성능과 수직 통합 생산성이 극대화되는 스택**을 쓴다.
-- **외부 호환은 개별 어댑터**로 해결한다. docs/03(HTTP/JSON)과 docs/04(WebSocket)는 **해당 어댑터를 채택하는 경우**의 제안 규약이며, 내부 코어 규약이나 유일한 외부 형식이 아니다.
-- 내부 규약의 구체 스택·포맷은 미정이다. 특정 프로토콜·포맷을 확정된 것처럼 도입하지 않는다.
+- **확정**: 명시적으로 결정된 사실. 확정과 충돌하는 구조·코드를 작성하거나 임의로 바꾸지 않는다.
+- **제안**: 따르되, 더 나은 대안이 있으면 근거와 함께 제시하고 리뷰 승인을 받는다.
+- **미정**: 임의로 정하지 않는다. 공통 미정은 `docs/07-open-questions.md`, 레포별 미정은 각 레포의 `docs/04-open-questions.md`를 확인하고 질문한다.
 
 ## 작업별로 읽을 문서
 
 | 하려는 작업 | 읽을 문서 |
 |---|---|
-| 범위 판단, 확정 방향 확인 | `docs/00-vision.md` |
-| DX 설계, API·DSL·도구의 사용성 판단 | `docs/01-dx-principles.md` |
-| 계층을 넘는 설계 (소유권, 오류, 취소, 동시성, 어댑터 경계, 접근 권한·철회, 대용량 전송) | `docs/02-core-contracts.md` |
-| HTTP/JSON 어댑터 | `docs/03-api-protocol.md` |
-| WebSocket 어댑터 | `docs/04-realtime-communication.md` |
-| 브랜치, 커밋, PR, 버전닝, 포크 운영 | `docs/05-development-rules.md` |
-| 이름 짓기 | `docs/06-naming-conventions.md` |
-| 결정되지 않은 사항 확인 | `docs/07-open-questions.md` |
-| 개별 제품·코드 레포의 구조·책임·구현 세부 | **해당 제품·레포의 문서** (docs에 없음) |
+| 범위 판단, 레포 역할표, 확정된 엔지니어링 방향 확인 | `docs/00-vision.md` |
+| DX 설계, 컴포넌트 조립성·아키텍처 고점·표현 수단 판단 | `docs/01-dx-principles.md` |
+| 계층을 넘는 설계 (코어 `ref` 소유권, 오류, 취소, 동시성, 어댑터 경계, 권한·철회, 대용량 전송) | `docs/02-core-contracts.md` |
+| HTTP/JSON 어댑터 채택 시 | `docs/03-api-protocol.md` |
+| WebSocket 어댑터 채택 시 | `docs/04-realtime-communication.md` |
+| 모노레포 구조(`apps/`, `crates/`), 브랜치, 커밋, 버전닝, 포크·`unit optimization` 절차 | `docs/05-development-rules.md` |
+| 이름 짓기 및 언어별 코드 컨벤션 | `docs/06-naming-conventions.md` |
+| 공통 미정 사항 확인 | `docs/07-open-questions.md` |
+| 개별 코드 레포(`hyper`, `ring`, `lace`)의 도메인·DX·크레이트·어댑터 세부 | **해당 코드 레포의 `README.md` 및 `docs/00`~`04`** |
 
 ## 작업 절차
 
 1. 명세 revision을 고정한다.
-2. 작업에 해당하는 문서를 위 표로 찾아 전문을 읽는다. 기억이나 요약에 의존하지 않는다.
-3. 문서의 상태를 확인한다. 확정은 따르고, 미정은 임의로 정하지 않는다.
-4. 구현이 명세의 제안과 다르게 가야 할 이유가 생기면, 코드를 바꾸기 전에 근거를 들어 제안하고 리뷰 승인을 받는다.
-5. 명세에 없는 규격(숫자, 한도, 포맷)을 새로 정해야 하면 공식 문서 등 근거와 확인 날짜를 함께 남긴다.
-6. 커밋은 `docs/05-development-rules.md`를 따른다: Conventional Commits, 한 커밋은 한 논리 변경.
-
-## 적용 예시
-
-**작업**: 외부 노출 기능을 추가한다.
-
-1. 명세 revision을 고정한다.
-2. 작업 대상 레포의 문서에서 책임과 위치를 확인한다. 문서가 없으면 임의로 정하지 않고 묻는다.
-3. `docs/02-core-contracts.md`의 오류 분류, 취소, 어댑터 변환·손실, 접근 권한 규칙을 적용한다.
-4. HTTP/JSON 어댑터를 쓰기로 했다면 `docs/03-api-protocol.md`, WebSocket이면 `docs/04-realtime-communication.md`를 따른다.
-5. 이름은 `docs/06-naming-conventions.md`, 브랜치·커밋은 `docs/05-development-rules.md`를 따른다.
-6. 미정 사항에 걸리면 임의로 정하지 않고 멈춰 확인한다.
-
-## 하지 않는 것
-
-- 제안·미정 내용을 확정인 것처럼 코드, 주석, 문서에 쓰지 않는다.
-- 확정 사항과 충돌하는 리팩터링·구조 변경을 커밋하지 않는다.
-- 명세를 코드에 맞춰 임의로 수정하지 않는다.
-- docs에 제품별·레포별 세부를 쓰거나, 없는 세부를 추측으로 채우지 않는다.
-- unit optimization은 `docs/05-development-rules.md` §7의 단계(1단계: 불필요한 추상화 제거 및 `hyper` 코어 직결 수직화 → 2단계: 병목 확인 구간 심화 개조)를 따르며, 측정 근거 없이 2단계 개조를 선행하지 않는다.
-- 내부 규약의 구체 스택·포맷을 확정된 것처럼 도입하지 않는다.
+2. 작업에 해당하는 범용 명세(`hyperish/docs`)와 대상 코드 레포의 문서(`docs/00`~`04`)를 찾아 전문을 읽는다.
+3. 확정 사항은 따르고, 제안 변경이나 미정 사항 결정이 필요하면 먼저 안을 제시해 승인을 받은 뒤 반영한다.
+4. 커밋은 `docs/05-development-rules.md`를 따른다: Conventional Commits, 한 커밋은 한 논리 변경.
