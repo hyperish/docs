@@ -1,6 +1,6 @@
 ---
 name: hyperish-spec
-description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace, hera 레포)에서 코드를 작성하거나 구조·DSL·어댑터·DX를 설계할 때 사용하는 범용 명세 스킬. 작업에 해당하는 명세 문서를 찾아 읽고, 문서 상태 규칙(확정/제안/미정)을 적용해 명세와 어긋나는 코드를 만들지 않는다. 하이퍼리쉬 관련 작업이면 항상 먼저 이 스킬을 연다.
+description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace, glint 레포)에서 코드를 작성하거나 구조·DSL·어댑터·DX를 설계할 때 사용하는 범용 명세 스킬. 작업에 해당하는 명세 문서를 찾아 읽고, 문서 상태 규칙(확정/제안/미정)을 적용해 명세와 어긋나는 코드를 만들지 않는다. 하이퍼리쉬 관련 작업이면 항상 먼저 이 스킬을 연다.
 ---
 
 # Hyperish 명세 스킬
@@ -37,10 +37,10 @@ description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace, hera �
 
 ### 레포
 
-- **hyper** (올인원 개발 프레임워크 & 툴체인 — **Rust/Cargo에 대한 Bun 포지션**): 파편화된 크레이트·빌드 도구를 대체하는 수직 통합 진입점. 프로젝트 `init`·`preview`·`lint`·`test` 등 올인원 개발 환경과 생산성 관리, 상태성(단일 스레드 고속 경로 + 멀티스레드 `Send + Sync` 경로 이원화)·직렬화·파서·`lace`/`hera` 공통 UI 문법·API 규격 인터페이스 등 배터리 포함(batteries-included) 범용 코어 모듈 내장 (레퍼런스: Bun, QML/Slint, Dioxus `rsx!`, GPUI).
+- **hyper** (올인원 개발 프레임워크 & 툴체인 — **Rust/Cargo에 대한 Bun 포지션**): 파편화된 크레이트·빌드 도구를 대체하는 수직 통합 진입점. 프로젝트 `init`·`preview`·`lint`·`test` 등 올인원 개발 환경과 생산성 관리, 상태성(단일 스레드 고속 경로 + 멀티스레드 `Send + Sync` 경로 이원화)·직렬화·파서·`lace`/`glint` 공통 UI 문법·API 규격 인터페이스 등 배터리 포함(batteries-included) 범용 코어 모듈 내장 (레퍼런스: Bun, QML/Slint, Dioxus `rsx!`, GPUI).
 - **ring** (백엔드): DB, Cache, MSA, WS/WT 및 `lace` 프로덕션 서빙 등 백엔드 도메인 전반 (레퍼런스: `loco.rs`).
-- **lace** (웹): 모든 DOM/웹 기능을 `hyper`/`lace`로 표현해 쉽게 구축하고 DOM으로 출력하는 프레임워크. 최소 CRA 수준의 로컬 프리뷰/데브 서빙을 자체 내장하며, 프로덕션 서빙은 `ring`, 웹뷰 호스팅은 `hera`가 담당한다. `hera`와 **동일한 UI 문법**을 사용한다 (DX 레퍼런스: QML/Slint·Dioxus `rsx!`·GPUI 빌더, 파이프라인: Leptos, 웹 UI: Ionic).
-- **hera** (네이티브 UI): GPU(CPU 폴백 필수) 기반 데스크톱·iOS·Android 네이티브 UI (레퍼런스: GPUI, `anomalyco/rune`, QML/Slint). `lace`와 **동일한 UI 문법**을 사용한다. **자체 WebView 절대 사용 금지**이며, 웹뷰가 필요한 경우 `lace` 출력물을 받아 띄우는 호환 어댑터(`hera` 소속)로만 제공한다.
+- **lace** (웹): 모든 DOM/웹 기능을 `hyper`/`lace`로 표현해 쉽게 구축하고 DOM으로 출력하는 프레임워크. 최소 CRA 수준의 로컬 프리뷰/데브 서빙을 자체 내장하며, 프로덕션 서빙은 `ring`, 웹뷰 호스팅은 `glint`가 담당한다. `glint`와 **동일한 UI 문법**을 사용한다 (DX 레퍼런스: QML/Slint·Dioxus `rsx!`·GPUI 빌더, 파이프라인: Leptos, 웹 UI: Ionic).
+- **glint** (네이티브 UI): GPU(CPU 폴백 필수) 기반 데스크톱·iOS·Android 네이티브 UI (레퍼런스: GPUI, `anomalyco/rune`, QML/Slint). `lace`와 **동일한 UI 문법**을 사용한다. **자체 WebView 절대 사용 금지**이며, 웹뷰가 필요한 경우 `lace` 출력물을 받아 띄우는 호환 어댑터(`glint` 소속)로만 제공한다.
 
 Rust 기반 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 구조의 Cargo 워크스페이스 모노레포를 따른다(`docs/05-development-rules.md` §1; 비-Rust 전용 레포는 해당 생태계 워크스페이스 구조를 따름). 각 레포의 세부 문서는 해당 레포의 `docs/`(`00-overview.md` ~ `04-open-questions.md`)에서 동일한 구조로 관리한다.
 
@@ -48,7 +48,7 @@ Rust 기반 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 구조�
 
 - 코어는 대부분 **Rust**로 작성한다.
 - 처음부터 전부 새로 만들지 않는다. **DSL(QML/Slint 스타일, Dioxus `rsx!` 등 proc macro)을 채택하는 이유는 오직 개발 생산성 때문**이다. 생산성과 가독성이 충족되거나 더 효율적인 방법(GPUI식 순수 Rust 빌더·체이닝, 코드젠 등)이 있다면 **그 어떤 방법을 사용해도 무관**하다.
-- **`lace`(웹)와 `hera`(네이티브)는 같은 UI 문법을 사용**하며, 웹(DOM) 전용 기능이 들어가느냐 네이티브 전용 기능이 들어가느냐에 따라 타깃 기능이 나뉜다.
+- **`lace`(웹)와 `glint`(네이티브)는 같은 UI 문법을 사용**하며, 웹(DOM) 전용 기능이 들어가느냐 네이티브 전용 기능이 들어가느냐에 따라 타깃 기능이 나뉜다.
 - 성능 위주의 기존 라이브러리·프레임워크를 **포크한 뒤 unit optimization을 거치거나 기반으로 삼되**, **수직 통합을 위해 `hyper`의 core를 단일 기준(ref)으로 삼아 구현**하고 **그 위에 호환 어댑터를 두는 구조**로 작업한다.
 - **unit optimization**: (1단계) 포크본에서 불필요한 범용 추상화·미사용 피처를 걷어내고 `hyper` 코어 타입과 무변환·제로카피로 직결하는 수직화를 기본 수행하고, (2단계) 프로파일링으로 확인된 병목 구간에 한해 메모리 레이아웃(Arena/SoA)·SIMD 등 심화 개조로 확장한다(`docs/05-development-rules.md` §7).
 - 포크는 **내부 운영 전략**이다. 외부 개발자에게 포크를 요구하는 기본 경로로 설계하지 않는다.
