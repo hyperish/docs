@@ -25,7 +25,7 @@
 - 코어는 대부분 **Rust**로 작성하며, Rust 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 모노레포([05-development-rules](05-development-rules.md) §1)로 운영합니다.
 - 처음부터 전부 새로 만들지 않습니다. 성능 위주의 검증된 라이브러리·프레임워크를 **포크하거나 기반으로 삼아 `unit optimization`**([05-development-rules](05-development-rules.md) §7)을 거칩니다.
 - 수직 통합을 위해 **`hyper`의 코어를 단일 기준(`ref`)으로 삼아 구현**하고, **그 위에 외부·타깃 호환 어댑터를 두는 구조**([02-core-contracts](02-core-contracts.md))로 작업합니다.
-- **DSL 채택 이유는 오직 개발 생산성 때문**입니다. 생산성과 가독성이 충족되거나 더 효율적인 방법이 있다면 어떤 방법을 사용해도 무관합니다([01-dx-principles](01-dx-principles.md)).
+- **DSL 채택 이유는 개발 생산성 때문**입니다. UI 뷰 마크업(`lace`)처럼 중첩 트리 가독성과 컴파일 타임 템플릿 분리·핫리로드 이점이 확실한 곳은 **proc macro DSL로 고정**하고, 컴포넌트·라우트·가드 조립(`ring`, `lace`)처럼 일반 Rust 코드가 깔끔한 곳은 **메서드 체이닝/함수**를 씁니다([01-dx-principles](01-dx-principles.md)).
 
 ### 규약 모델 원칙
 
