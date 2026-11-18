@@ -39,9 +39,12 @@
 - 결정: 공통 DX 레퍼런스를 QML/Slint·Dioxus(`rsx!` 및 매크로)·GPUI(순수 Rust 빌더)로 삼고, 모든 레이어는 성능 중심 라이브러리를 포크/기반으로 하되 `hyper`의 core를 단일 기준(ref)으로 수직 통합하고 그 위에 호환 어댑터를 배치
   - 날짜: 2026-11-17
   - 영향: docs/00, 01, 02 및 3개 코드 레포(hyper, ring, lace) 문서
-- 결정: 3개 핵심 레포의 세부 도메인과 역할 경계 확정 — `hyper`(기존 Rust/Cargo가 Node.js라면 Bun에 해당하는 올인원 포지션: `init`/`preview`/`lint`/`test`/`build` 통합 툴체인 + 이원화 스레드 모델의 상태성·직렬화·파서·공통 UI 문법·API 규격 기본 내장 코어), `ring`(DB·Cache·MSA·WS/WT 및 `lace` 프로덕션 서빙 등 백엔드 전반, 레퍼런스 `loco.rs`), `lace`(웹 DOM과 데스크톱·iOS·Android GPU+CPU 폴백 네이티브를 아우르는 통합 UI 프레임워크: 웹 타깃은 Leptos 파이프라인·Ionic형 웹 UI·CRA급 로컬 데브 서빙을 내장하고, 네이티브 타깃은 GPUI·`anomalyco/rune`을 레퍼런스로 자체 WebView를 절대 쓰지 않으며 웹뷰가 필요할 때만 옵트인 웹뷰 어댑터로 웹 타깃 출력을 마운트함)
-  - 날짜: 2026-11-17 (`lace` 통합: 2026-11-18)
-  - 영향: docs/00, 01, skills/hyperish-spec 및 각 코드 레포(hyper, ring, lace) 문서
+- 결정: 3개 핵심 레포의 세부 도메인과 역할 경계 확정 — `hyper`(기존 Rust/Cargo가 Node.js라면 Bun에 해당하는 올인원 포지션: `init`/`preview`/`lint`/`test`/`build` 통합 툴체인 + 이원화 스레드 모델의 상태성 `signal`·직렬화·파서·**프론트/백엔드 공용 Validation**·공통 UI 문법·**API/OpenAPI 스키마 원천 및 타입 안전 클라이언트 인터페이스** 기본 내장 코어), `ring`(**Rust 스타일 컴포넌트 조립식 백엔드**: DB/ORM 쿼리·Cache·Middleware·Auth·MSA·WS/WT·Swagger 자동 서빙·인메모리 `TestClient` 및 `lace` 프로덕션 서빙 등 백엔드 전반, 레퍼런스 `loco.rs`), `lace`(웹 DOM과 데스크톱·iOS·Android GPU+CPU 폴백 네이티브를 아우르는 **컴포넌트 기반 통합 UI 프레임워크**: 웹 타깃은 Leptos 파이프라인·Ionic형 웹 UI·CRA급 로컬 데브 서빙을 내장하고, 네이티브 타깃은 GPUI·`anomalyco/rune`을 레퍼런스로 자체 WebView를 절대 쓰지 않으며 웹뷰가 필요할 때만 옵트인 웹뷰 어댑터로 웹 타깃 출력을 마운트함)
+  - 날짜: 2026-11-17 (`lace` 통합 및 컴포넌트 아키텍처·모듈 분담 확정: 2026-11-18)
+  - 영향: docs/00, 01, 02, skills/hyperish-spec 및 각 코드 레포(hyper, ring, lace) 문서
+- 결정: 아키텍처 고점 개방 및 문서 UX 원칙 확정 — 프레임워크가 고정된 폴더 구조를 강제하지 않고 개발자가 **Rust 스타일 컴포넌트(Component) 조립**으로 직접 아키텍처를 설계할 수 있게 고점을 높이며, 문서는 Dioxus 0.7 Welcome 가이드처럼 **"왜 써야 하는지(기존 스택 대비 체급 차이), 따라 읽기만 해도 이해되는 프로젝트 구조와 빠른 시작"**이 직관적으로 드러나도록 구성함
+  - 날짜: 2026-11-18
+  - 영향: docs/01 및 각 코드 레포(hyper, ring, lace) 문서
 
 ## 결정을 기록하는 법
 
