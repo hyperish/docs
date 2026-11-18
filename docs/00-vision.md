@@ -12,9 +12,9 @@
 
 | 레포 | 역할 | 주요 범위 및 레퍼런스 |
 |---|---|---|
-| **hyper** | 올인원 개발 프레임워크 & 툴체인 | **Rust/Cargo 생태계에 대한 Bun 포지션.** 프로젝트 `init`·`preview`·`lint`·`test`·`build` 등 개발 환경·생산성 올인원 통합, 상태성·직렬화·파서·공통 UI 문법·API 규격 인터페이스 등 기본 내장(batteries-included) 범용 코어 모듈 (레퍼런스: **Bun**, **Dioxus**, **QML/Slint**, **GPUI**) |
-| **ring** | 백엔드 | DB, Cache, MSA, WS/WT 및 `lace` 웹 빌드 프로덕션 서빙 등 백엔드 도메인 전반 (레퍼런스: `loco.rs`) |
-| **lace** | 크로스플랫폼 UI (Web & Native) | **단일 UI 문법**으로 웹(DOM)과 네이티브(GPU/CPU)를 모두 다루는 통합 UI 프레임워크.<br>• **Web 타깃**: 모든 DOM/웹 기능을 쉽게 표현해 DOM으로 출력, CRA 수준의 로컬 프리뷰·데브 서빙 내장 (파이프라인: **Leptos**, 웹 UI: **Ionic**)<br>• **Native 타깃**: 데스크톱·iOS·Android 지원, GPU 가속 + **필수 CPU 폴백** 기반 네이티브 렌더링. **네이티브 UI에 WebView 절대 미사용**, 웹뷰가 꼭 필요한 경우에만 `lace` 웹 출력을 띄우는 옵트인 웹뷰 어댑터 제공 (레퍼런스: **GPUI**, **`anomalyco/rune`**)<br>• **공통 DX 레퍼런스**: **QML/Slint**, **Dioxus `rsx!`**, **GPUI 순수 Rust 빌더** |
+| **hyper** | 올인원 개발 프레임워크 & 툴체인 | **Rust/Cargo 생태계에 대한 Bun 포지션.** 프로젝트 `init`·`preview`·`lint`·`test`·`build` 등 개발 환경·생산성 올인원 통합, 상태성(`signal`)·직렬화·파서·**공용 Validation**·공통 UI 문법·**API/OpenAPI 스키마 원천 및 클라이언트 인터페이스** 등 기본 내장(batteries-included) 범용 코어 모듈 (레퍼런스: **Bun**, **Dioxus**, **QML/Slint**, **GPUI**) |
+| **ring** | 백엔드 | **Rust 스타일 컴포넌트(Component) 조립식 백엔드.** DB/ORM 쿼리, Cache, Middleware, Auth, MSA, WS/WT 실시간 룸, Swagger/OpenAPI 자동 서빙, 인메모리 `TestClient` 및 `lace` 웹 빌드 프로덕션 서빙 등 백엔드 도메인 전반 (레퍼런스: `loco.rs`) |
+| **lace** | 크로스플랫폼 UI (Web & Native) | **단일 UI 문법과 컴포넌트 아키텍처**로 웹(DOM)과 네이티브(GPU/CPU)를 모두 다루는 통합 UI 프레임워크.<br>• **Web 타깃**: 모든 DOM/웹 기능을 쉽게 표현해 DOM으로 출력, CRA 수준의 로컬 프리뷰·데브 서빙 내장 (파이프라인: **Leptos**, 웹 UI: **Ionic**)<br>• **Native 타깃**: 데스크톱·iOS·Android 지원, GPU 가속 + **필수 CPU 폴백** 기반 네이티브 렌더링. **네이티브 UI에 WebView 절대 미사용**, 웹뷰가 꼭 필요한 경우에만 `lace` 웹 출력을 띄우는 옵트인 웹뷰 어댑터 제공 (레퍼런스: **GPUI**, **`anomalyco/rune`**)<br>• **공통 DX 레퍼런스**: **QML/Slint**, **Dioxus `rsx!`**, **GPUI 순수 Rust 빌더** |
 
 이 표는 어떤 레포가 있는지 찾기 위한 공통 기준입니다. 각 레포의 세부 설계는 해당 코드 레포의 `docs/`에서 동일한 문서 구조(`00-overview` ~ `04-open-questions`)로 다룹니다.
 
