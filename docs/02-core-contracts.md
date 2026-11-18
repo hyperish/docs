@@ -43,7 +43,10 @@
 - **변환**: 내부 모델 ↔ 외부 규약의 매핑을 양방향으로 명세합니다. 변환 코드는 어댑터 안에만 두고, 코어가 외부 규약의 타입을 알지 못하게 합니다.
 - **손실**: 외부 규약이 표현 못 하는 내부 값이 나오면 **거부 / 근사 변환 / 보존 필드로 통과** 중 하나를 명시적으로 선택하고 기록합니다. 조용한 소실은 허용하지 않습니다.
 - **버전**: 어댑터는 자신이 지원하는 코어 버전 범위와 외부 규약 버전을 선언합니다.
-- **비용 및 이중 레일(Dual-Rail) 전송**: 변환의 복사·할당 비용을 측정 지점으로 둡니다. 외부 서드파티·공개 호환 경계에서는 표준 어댑터([03-api-protocol](03-api-protocol.md) HTTP/JSON, [04-realtime-communication](04-realtime-communication.md) WebSocket)를 쓰고, 같은 하이퍼리쉬 계층 간(`lace` ↔ `ring`, `ring` 내부 MSA) 통신에서는 어댑터 변환 오버헤드를 우회해 `hyper` 내부 바이너리 코덱과 고속 전송(WebTransport/QUIC, 실패 시 WS 자동 폴백)으로 직결하는 경로를 기본 제공합니다.
+- **비용 및 3단계(3-Tier) 전송 경계**: 변환의 복사·할당 비용을 측정 지점으로 둡니다. 같은 하이퍼리쉬 계층 간에는 거리에 따라 변환 오버헤드를 제거합니다:
+  1. **인프로세스(In-Process)**: 직렬화 없이 `hyper`의 공유 시그널(`SyncSignal`) 및 **Lock-Free SPSC/MPMC Ring Buffer(`SharedRingBuf`)**로 직접 공유합니다.
+  2. **로컬 멀티프로세스 IPC**: Unix Socket/Named Pipe 기반 `hyper-serde` 바이너리 RPC와 **OS 공유 메모리(`shm`/`mmap`) 기반 Shared Ring Buffer**(GPU 텍스처는 OS 핸들 전달)로 복사 없이 연결합니다.
+  3. **원격 네트워크(Dual-Rail)**: 외부 호환 경계는 표준 어댑터([03](03-api-protocol.md) HTTP/JSON, [04](04-realtime-communication.md) WebSocket)를 쓰고, 하이퍼리쉬 계층 간(`lace` ↔ `ring`, MSA)에는 `hyper-serde` 바이너리 코덱과 WebTransport/QUIC(실패 시 WS 자동 폴백)으로 직결합니다.
 
 ## 6. 접근 권한과 철회
 
