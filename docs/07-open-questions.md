@@ -10,12 +10,12 @@
 
 | # | 결정 | 왜 중요한가 | 지금의 방향(제안) |
 |---|---|---|---|
-| 1 | 공통 UI 문법 및 DSL의 세부 토큰·키워드 규격 | QML/Slint + Dioxus `rsx!` + GPUI 빌더 병행 방향과 `lace`·`hera` 문법 통일은 확정되었으나, 구체적인 프로퍼티·바인딩 표기법을 고정해야 파서(`hyper-parser`) 구현 가능 | Slint(QML 계열)의 선언적 프로퍼티·바인딩 가독성과 Dioxus `rsx!`의 Rust 표현식 결합성을 합친 문법 초안 작성 |
+| 1 | 공통 UI 문법 및 DSL의 세부 토큰·키워드 규격 | QML/Slint + Dioxus `rsx!` + GPUI 빌더 병행 방향과 `lace`·`glint` 문법 통일은 확정되었으나, 구체적인 프로퍼티·바인딩 표기법을 고정해야 파서(`hyper-parser`) 구현 가능 | Slint(QML 계열)의 선언적 프로퍼티·바인딩 가독성과 Dioxus `rsx!`의 Rust 표현식 결합성을 합친 문법 초안 작성 |
 | 2 | 내부 규약 모델의 구체 스택·포맷 | 성능·수직 통합 생산성 우선 원칙은 확정이지만 구체 직렬화·전송 와이어 포맷은 미정 | 미정. 외부 호환은 어댑터로 분리하는 원칙만 확정 |
 
 ## 결정됨
 
-- 결정: 코드 레포를 hyper(개발 프레임워크), ring(백엔드), lace(웹), hera(네이티브) 등으로 분리하고, Rust 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 모노레포(Cargo 워크스페이스) 구조를 사용
+- 결정: 코드 레포를 hyper(개발 프레임워크), ring(백엔드), lace(웹), glint(네이티브) 등으로 분리하고, Rust 코드 레포는 개별 레포 단위로 `apps/`, `crates/` 모노레포(Cargo 워크스페이스) 구조를 사용
   - 날짜: 2026-11-16 (모노레포 구조 구체화: 2026-11-17)
   - 영향: docs/00, 05, skills/hyperish-spec
 - 결정: docs는 모든 제품이 공유하는 범용 명세만 다루고, 세부 제품·레포 문서는 각 코드 레포에 둠
@@ -26,7 +26,7 @@
   - 날짜: 2026-11-16
   - 이유: 처음부터 다 깎기에는 공수가 많이 듦
   - 영향: docs/00, 05, 06
-- 결정: DSL 채택 목적과 표현 수단의 개방성 확정 — DSL(proc macro, QML 기반 Slint, Dioxus `rsx!` 등)을 채택하는 이유는 오직 **개발 생산성** 때문이며, 생산성이 충족되거나 더 효율적인 방법(GPUI식 순수 Rust 빌더, 코드젠 등)이 있다면 어떤 방법을 사용해도 무관함. 단, `lace`와 `hera`는 동일한 UI 문법/표현 체계를 공유함
+- 결정: DSL 채택 목적과 표현 수단의 개방성 확정 — DSL(proc macro, QML 기반 Slint, Dioxus `rsx!` 등)을 채택하는 이유는 오직 **개발 생산성** 때문이며, 생산성이 충족되거나 더 효율적인 방법(GPUI식 순수 Rust 빌더, 코드젠 등)이 있다면 어떤 방법을 사용해도 무관함. 단, `lace`와 `glint`는 동일한 UI 문법/표현 체계를 공유함
   - 날짜: 2026-11-16 (원칙 구체화: 2026-11-17)
   - 영향: docs/00, 01 및 전 코드 레포 문서
 - 결정: 기존 라이브러리·생태계 코어를 포크한 뒤 unit optimization을 거치는 운영 — 1단계로 불필요한 범용 추상화·미사용 피처를 제거하고 `hyper` 코어(ref)에 직결(수직화)하며, 추후 병목 구간에 한해 2단계(Arena/SoA 메모리 레이아웃·SIMD 등) 심화 개조 여지를 둠
@@ -37,10 +37,10 @@
   - 영향: docs/00, 02, 03, 04. 구체 스택은 열린 결정 #2
 - 결정: 공통 DX 레퍼런스를 QML/Slint·Dioxus(`rsx!` 및 매크로)·GPUI(순수 Rust 빌더)로 삼고, 모든 레이어는 성능 중심 라이브러리를 포크/기반으로 하되 `hyper`의 core를 단일 기준(ref)으로 수직 통합하고 그 위에 호환 어댑터를 배치
   - 날짜: 2026-11-17
-  - 영향: docs/00, 01, 02 및 4개 코드 레포(hyper, ring, lace, hera) 문서
-- 결정: 4개 핵심 레포의 세부 도메인과 역할 경계 확정 — `hyper`(기존 Rust/Cargo가 Node.js라면 Bun에 해당하는 올인원 포지션: `init`/`preview`/`lint`/`test` 통합 툴체인 + 이원화 스레드 모델의 상태성·직렬화·파서·공통 UI 문법·API 규격 내장 코어), `ring`(DB·Cache·MSA·WS/WT 및 `lace` 프로덕션 서빙 등 백엔드 전반, 레퍼런스 `loco.rs`), `lace`(DOM 기능을 전부 `hyper`/`lace`로 표현해 쉽게 구축하고 DOM으로 출력 + 최소 CRA 수준의 로컬 프리뷰/데브 서빙 내장, 파이프라인: Leptos, 웹 UI: Ionic), `hera`(GPU+CPU 폴백 네이티브 UI, 데스크톱·iOS·Android 지원, 자체 WebView 절대 금지 및 웹뷰 필요 시 `lace` 출력물을 띄우는 어댑터 소유, 레퍼런스: GPUI·`anomalyco/rune`)
+  - 영향: docs/00, 01, 02 및 4개 코드 레포(hyper, ring, lace, glint) 문서
+- 결정: 4개 핵심 레포의 세부 도메인과 역할 경계 확정 — `hyper`(기존 Rust/Cargo가 Node.js라면 Bun에 해당하는 올인원 포지션: `init`/`preview`/`lint`/`test` 통합 툴체인 + 이원화 스레드 모델의 상태성·직렬화·파서·공통 UI 문법·API 규격 내장 코어), `ring`(DB·Cache·MSA·WS/WT 및 `lace` 프로덕션 서빙 등 백엔드 전반, 레퍼런스 `loco.rs`), `lace`(DOM 기능을 전부 `hyper`/`lace`로 표현해 쉽게 구축하고 DOM으로 출력 + 최소 CRA 수준의 로컬 프리뷰/데브 서빙 내장, 파이프라인: Leptos, 웹 UI: Ionic), `glint`(GPU+CPU 폴백 네이티브 UI, 데스크톱·iOS·Android 지원, 자체 WebView 절대 금지 및 웹뷰 필요 시 `lace` 출력물을 띄우는 어댑터 소유, 레퍼런스: GPUI·`anomalyco/rune`)
   - 날짜: 2026-11-17
-  - 영향: docs/00, 01, skills/hyperish-spec 및 각 코드 레포(hyper, ring, lace, hera) 문서
+  - 영향: docs/00, 01, skills/hyperish-spec 및 각 코드 레포(hyper, ring, lace, glint) 문서
 
 ## 결정을 기록하는 법
 
