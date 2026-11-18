@@ -37,9 +37,9 @@ description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace 레포)
 
 ### 레포
 
-- **hyper** (올인원 개발 프레임워크 & 툴체인 — **Rust/Cargo에 대한 Bun 포지션**): 파편화된 크레이트·빌드 도구를 대체하는 수직 통합 진입점. 프로젝트 `init`·`preview`·`lint`·`test`·`build` 등 올인원 개발 환경과 생산성 관리, 상태성(단일 스레드 고속 경로 + 멀티스레드 `Send + Sync` 경로 이원화)·직렬화·파서·공통 UI 문법·API 규격 인터페이스 등 기본 내장(batteries-included) 범용 코어 모듈 내장 (레퍼런스: Bun, QML/Slint, Dioxus `rsx!`, GPUI).
-- **ring** (백엔드): DB, Cache, MSA, WS/WT 및 `lace` 웹 프로덕션 서빙 등 백엔드 도메인 전반 (레퍼런스: `loco.rs`).
-- **lace** (웹·네이티브 통합 크로스플랫폼 UI): **단일 UI 문법**으로 웹(DOM)과 네이티브(GPU/CPU)를 모두 다루는 통합 UI 프레임워크 (DX 레퍼런스: QML/Slint·Dioxus `rsx!`·GPUI 빌더).
+- **hyper** (올인원 개발 프레임워크 & 툴체인 — **Rust/Cargo에 대한 Bun 포지션**): 파편화된 크레이트·빌드 도구를 대체하는 수직 통합 진입점. 프로젝트 `init`·`preview`·`lint`·`test`·`build` 등 올인원 개발 환경과 생산성 관리, 상태성(`signal`, 단일 스레드 고속 경로 + 멀티스레드 `Send + Sync` 경로 이원화)·직렬화·파서·**프론트/백엔드 공용 Validation**·공통 UI 문법·**API/OpenAPI 스키마 원천 및 타입 안전 클라이언트 계약** 등 기본 내장(batteries-included) 범용 코어 모듈 내장 (레퍼런스: Bun, QML/Slint, Dioxus `rsx!`, GPUI).
+- **ring** (백엔드): **Rust 스타일 컴포넌트(Component) 조립식 백엔드 아키텍처.** 고정된 폴더 구조를 강제하지 않고 `provide`·`wrap`(Middleware/AuthGuard)·라우트·워커·실시간 룸을 컴포넌트 단위로 묶어 조립한다. DB/ORM 쿼리, Cache, Middleware, Auth, MSA, WS/WT, Swagger/OpenAPI 자동 서빙, 인메모리 `TestClient`, `lace` 웹 프로덕션 서빙 등 백엔드 도메인 전반을 다룬다 (레퍼런스: `loco.rs`).
+- **lace** (웹·네이티브 통합 크로스플랫폼 UI): **단일 UI 문법과 컴포넌트 아키텍처**로 웹(DOM)과 네이티브(GPU/CPU)를 모두 다루는 통합 UI 프레임워크 (DX 레퍼런스: QML/Slint·Dioxus `rsx!`·GPUI 빌더).
   - **Web 타깃**: 모든 DOM/웹 기능을 `hyper`/`lace`로 표현해 쉽게 구축하고 DOM으로 출력. 최소 CRA 수준의 로컬 프리뷰/데브 서빙을 자체 내장하며 프로덕션 서빙은 `ring`이 담당한다 (파이프라인: Leptos, 웹 UI: Ionic).
   - **Native 타깃**: GPU(CPU 폴백 필수) 기반 데스크톱·iOS·Android 네이티브 UI (레퍼런스: GPUI, `anomalyco/rune`). **네이티브 UI에 WebView 절대 사용 금지**이며, 웹뷰가 꼭 필요한 경우에만 `lace` 내 옵트인 웹뷰 서피스 어댑터(`lace-adapter-webview`)로 웹 타깃 출력을 띄운다.
 
