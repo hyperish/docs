@@ -6,14 +6,18 @@
 
 ## 열려 있는 결정
 
-| # | 결정 | 왜 중요한가 | 지금의 방향(제안) |
-|---|---|---|---|
-| 1 | 내부 규약 모델의 구체 스택·포맷 | 성능·수직 통합 생산성 우선 원칙은 확정이지만 구체 직렬화·전송 와이어 포맷은 미정 | 미정. 외부 호환은 어댑터로 분리하는 원칙만 확정 |
-| 2 | 인라인 서버 함수 호출 계약 및 풀스택 심볼 경계 (`hyve` · `orbic` · `serge`) | 명시적 컴포넌트 조립(`.wrap`/`.mount`)과 인라인 서버 함수의 공존 방식, 클라이언트 빌드 시 서버 의존성 제거 경계, `orbic`/`serge` prelude 간 `component()` 심볼 충돌 해소 필요 | 풀스택 30줄 단일 End-to-End 스니펫을 기준으로 공통 계약과 심볼 네이밍(예: `orbic::component` vs `serge::feature` 등) 확정 |
-| 3 | 패밀리 공통 Phase 1~3 마일스톤 컷(Vertical Slice 우선순위) | 불변 아키텍처 원칙(`확정`)과 점진적 확장 기능을 분리하지 않으면 구현 착수 기준이 흐려짐 | Phase 1(코어 수직 슬라이스: 모델·상태·HTTP/DB·Web DOM·Desktop 기본) → Phase 2(실전 풀스택·캐시·SSR·데스크톱 시스템 API/Shm IPC) → Phase 3(모바일 OS 특화·HW SDK·WebTransport·MSA 고도화) 제안 |
+*(현재 패밀리 공통으로 열려 있는 미정 사항은 없습니다. 레포별 세부 미정 사항은 각 코드 레포의 `docs/04-open-questions.md`에서 추적합니다.)*
 
 ## 결정됨
 
+- **전 레포 순수 `MIT` 라이선스 통일 및 포크 라이선스 원칙 확정** (2026-11-19)
+  - 이유 및 내용: 하이퍼리쉬 패밀리 전 레포·크레이트를 순수 `MIT` 단일 라이선스로 통일하고, 직접 포크·내부 개조 대상은 `MIT` 선택 가능 크레이트로 제한하며 `Apache-2.0` 단독 크레이트는 외부 의존성/아키텍처 레퍼런스로만 사용함 (`docs/05` §5, §7)
+- **내부 바이너리 와이어 포맷(`rkyv`) · MIT 포크 스택 및 내부 코어 `unit optimization` 방향 확정** (2026-11-19)
+  - 이유 및 내용: 내부 제로카피 바이너리 와이어 포맷을 `rkyv`(MIT, `bytecheck` 검증)로 확정하고, 각 코드 레포별 MIT 포크 대상과 1·2단계 내부 코어 개조 타깃(`reactive_graph`, `tachys`, `wgpu`, `taffy`, `sqlx-core`, `fred` 등)을 확정함 (`hyve`/`orbic`/`serge` `docs/02`, `04`)
+- **인라인 서버 함수(`#[server]`) ↔ 명시적 컴포넌트 조립 계약 및 풀스택 심볼 분리 확정** (2026-11-19)
+  - 이유 및 내용: 숨겨진 전역 자동 등록 대신 `#[server]` 핸들러를 `orbic::component().wrap(...).handle(...)`로 명시 마운트하며, 클라이언트 빌드에서는 `#[server_ctx]` 및 서버 본문을 컴파일 타임에 제거해 클라이언트 스텁만 남김. 풀스택 심볼 충돌 방지를 위해 백엔드 조립은 `orbic::component()`, 프론트 기능 조립은 `serge::feature()`, UI 뷰 함수는 `#[component]`로 고정함 (`docs/02`, `06`, `orbic`/`serge` `docs/01`)
+- **패밀리 공통 Phase 1~3 마일스톤 컷(Vertical Slice 우선순위) 확정** (2026-11-19)
+  - 이유 및 내용: Phase 1(`v0.1.0` 최소 풀스택·Web DOM·Desktop GPU/CPU 폴백 수직 슬라이스) → Phase 2(`v0.2.0` HMR·캐시·스토리지·잡·SSR/SSG·데스크톱 시스템 API·Shm IPC) → Phase 3(`v0.3.0+` 바이너리 핫패칭·스토어 패키징·WebTransport·MSA·모바일 풀 SDK·SwiftUI/Glance 코드젠)으로 단계적 구현 순서를 확정함
 - **3개 코어 레포·패키지명 crates.io 비충돌 고유명 확정 (`hyper` → `hyve`, `ring` → `orbic`, `lace` → `serge`)** (2026-11-19)
   - 이유 및 내용: crates.io 선점 충돌(`hyper`, `ring`, `lace`)을 근본 해소하고 레포명 = crates.io 패키지명 = Rust 크레이트명 = CLI명을 1:1 일치시키기 위해 3개 핵심 프레임워크명을 `hyve`(올인원 코어·CLI), `orbic`(백엔드), `serge`(크로스플랫폼 UI)로 확정함 (`docs/00`, `01`, `02`, `05`, `06`, `SKILL.md`)
 - **3개 코어 레포(`hyve`, `orbic`, `serge`) 분리 및 Rust 모노레포(`apps/`, `crates/`) 구조 확정** (2026-11-16 ~ 2026-11-19)
