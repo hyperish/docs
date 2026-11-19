@@ -1,6 +1,6 @@
 ---
 name: hyperish-spec
-description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace 레포)에서 코드를 작성하거나 구조·DSL·어댑터·DX를 설계할 때 사용하는 범용 명세 스킬. 작업에 해당하는 명세 문서를 찾아 읽고, 문서 상태 규칙(확정/제안/미정)을 적용해 명세와 어긋나는 코드를 만들지 않는다. 하이퍼리쉬 관련 작업이면 항상 먼저 이 스킬을 연다.
+description: 하이퍼리쉬 프레임워크 패밀리(hyve, orbic, serge 레포)에서 코드를 작성하거나 구조·DSL·어댑터·DX를 설계할 때 사용하는 범용 명세 스킬. 작업에 해당하는 명세 문서를 찾아 읽고, 문서 상태 규칙(확정/제안/미정)을 적용해 명세와 어긋나는 코드를 만들지 않는다. 하이퍼리쉬 관련 작업이면 항상 먼저 이 스킬을 연다.
 ---
 
 # Hyperish 명세 스킬
@@ -16,7 +16,7 @@ description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace 레포)
 ## docs가 다루는 것과 다루지 않는 것
 
 - `hyperish/docs`는 **모든 제품과 레포가 공유하는 추상 계약과 공통 규칙**이다.
-- 특정 제품의 설계나 특정 코드 레포(`hyper`, `ring`, `lace`)의 세부 도메인·레퍼런스·크레이트 구조는 해당 레포의 `docs/00-overview.md` ~ `04-open-questions.md`에 있다.
+- 특정 제품의 설계나 특정 코드 레포(`hyve`, `orbic`, `serge`)의 세부 도메인·레퍼런스·크레이트 구조는 해당 레포의 `docs/00-overview.md` ~ `04-open-questions.md`에 있다.
 - 필요한 세부가 문서에 없다고 지어내지 않는다. 미정 사항이나 설계 변경은 먼저 브리핑하고 리뷰 승인을 받은 뒤에만 반영한다.
 
 ## 명세 revision 고정 (재현성)
@@ -41,7 +41,7 @@ description: 하이퍼리쉬 프레임워크 패밀리(hyper, ring, lace 레포)
 | 모노레포 구조(`apps/`, `crates/`), 브랜치, 커밋, 버전닝, 포크·`unit optimization` 절차 | `docs/05-development-rules.md` |
 | 이름 짓기 및 언어별 코드 컨벤션 | `docs/06-naming-conventions.md` |
 | 공통 미정 사항 확인 | `docs/07-open-questions.md` |
-| 개별 코드 레포(`hyper`, `ring`, `lace`)의 도메인·DX·크레이트·어댑터 세부 | **해당 코드 레포의 `README.md` 및 `docs/00`~`04`** |
+| 개별 코드 레포(`hyve`, `orbic`, `serge`)의 도메인·DX·크레이트·어댑터 세부 | **해당 코드 레포의 `README.md` 및 `docs/00`~`04`** |
 
 ## 작업 절차
 
