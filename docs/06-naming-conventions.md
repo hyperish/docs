@@ -1,6 +1,6 @@
 # 06. 네이밍·코딩 컨벤션
 
-> 상태: **제안** · 기준일: 2026-11-17
+> 상태: **제안** · 기준일: 2026-11-19
 
 코드, API, DB, 문서 전반의 이름 규칙입니다. 개발 절차 규칙은 [개발 규칙](05-development-rules.md)을 봅니다. API·DB·메시지 명명 규칙은 언어와 무관하게 적용하고, 코드 규칙은 Rust(§3, 코어 전략상 기본)와 TypeScript(§4, 사용하는 레포)로 나눕니다.
 
@@ -16,9 +16,9 @@
 | 대상 | 규칙 | 예시 |
 |---|---|---|
 | 파일·디렉터리 (문서, 설정, 일반 모듈) | 소문자 kebab-case (단, Rust 소스 파일은 `snake_case.rs`, TS 컴포넌트 파일은 `PascalCase.tsx`) | `api-protocol.md`, `config-loader.ts` |
-| Rust 크레이트 | 소문자 kebab-case (Cargo), snake_case (코드 내) | `my-crate` / `my_crate` |
+| Rust 크레이트 | 소문자 kebab-case (Cargo), snake_case (코드 내) — 공개 레지스트리(crates.io) 선점명 충돌 시 네임스페이스 전략은 [07-open-questions](07-open-questions.md) 따름 | `my-crate` / `my_crate` |
 | Rust 타입·트레이트·열거형 및 배리언트 | PascalCase | `ParseError` |
-| Rust 함수·변수·메서드·모듈·파일 | snake_case | `load_config`, `scene_node.rs` |
+| Rust 함수·변수·메서드·모듈·파일 | snake_case (단, UI 뷰 컴포넌트 매크로가 붙은 함수만 PascalCase 허용하며 매크로가 `#[allow(non_snake_case)]`를 자동 부여) | `load_config`, `scene_node.rs`, `CounterCard` |
 | Rust 상수·static | SCREAMING_SNAKE_CASE | `MAX_RETRIES` |
 | proc macro (derive) | PascalCase (Rust Reference, 2026-11-17 확인: https://doc.rust-lang.org/reference/procedural-macros.html) | `#[derive(MyItem)]` |
 | proc macro (attribute, function-like) | snake_case | `#[my_attr]`, `define_item!` |
@@ -46,6 +46,7 @@
 - `unsafe`는 꼭 필요한 곳에만 쓰고, 쓰는 곳마다 안전성 근거를 주석으로 남깁니다.
 - proc macro 크레이트는 `proc-macro = true` 전용 크레이트로 분리하고, 사용자 노출은 진입 크레이트의 재수출로 통일합니다.
 - DSL 키워드·매크로 이름은 짧은 일반어를 우선하되, 생태계 관례와 충돌하지 않게 합니다.
+- 복수 프레임워크 레포의 `prelude::*`를 풀스택 코드에서 함께 임포트할 때 동일 심볼(`component()` 등)이 충돌하지 않도록 빌더·어트리뷰트 이름을 구분하거나 명확한 네임스페이스를 둡니다.
 
 ## 4. TypeScript (사용하는 레포)
 
