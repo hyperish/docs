@@ -16,7 +16,7 @@
 | 대상 | 규칙 | 예시 |
 |---|---|---|
 | 파일·디렉터리 (문서, 설정, 일반 모듈) | 소문자 kebab-case (단, Rust 소스 파일은 `snake_case.rs`, TS 컴포넌트 파일은 `PascalCase.tsx`) | `api-protocol.md`, `config-loader.ts` |
-| Rust 크레이트 | 소문자 kebab-case (Cargo), snake_case (코드 내) — 공개 레지스트리(crates.io) 선점명 충돌 시 네임스페이스 전략은 [07-open-questions](07-open-questions.md) 따름 | `my-crate` / `my_crate` |
+| Rust 크레이트 | 소문자 kebab-case (Cargo), snake_case (코드 내) — 코어 3대 레포(`hyve`, `orbic`, `serge`)는 레포명 = crates.io 패키지명 = 코드 크레이트명 1:1 일치 | `hyve-core` / `hyve_core` |
 | Rust 타입·트레이트·열거형 및 배리언트 | PascalCase | `ParseError` |
 | Rust 함수·변수·메서드·모듈·파일 | snake_case (단, UI 뷰 컴포넌트 매크로가 붙은 함수만 PascalCase 허용하며 매크로가 `#[allow(non_snake_case)]`를 자동 부여) | `load_config`, `scene_node.rs`, `CounterCard` |
 | Rust 상수·static | SCREAMING_SNAKE_CASE | `MAX_RETRIES` |
