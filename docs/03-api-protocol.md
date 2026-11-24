@@ -37,7 +37,7 @@
 
 ## 4. 응답 형식
 
-- 성공: `{ "data": ... }`. 목록은 `{ "data": [...], "page": { "nextCursor": ..., "hasMore": ... } }`.
+- 성공: `{ "data": ... }`. 상태 코드는 본문이 있으면 `200`, 돌려줄 값이 없으면 본문 없는 `204`입니다(제안). 목록은 `{ "data": [...], "page": { "nextCursor": ..., "hasMore": ... } }`.
 - 실패: `{ "error": { "code": "...", "message": "...", "details": { }, "requestId": "..." } }`.
 - `code`는 `snake_case`의 안정된 문자열이며 클라이언트는 이 값으로 분기합니다. `message`는 사람용이라 파싱하지 않습니다.
 - HTTP 상태 코드와 `code`를 함께 씁니다. 상태 코드만으로 의미를 전달하지 않습니다.
@@ -53,7 +53,7 @@
 | 405 | 허용하지 않는 메서드 | `method_not_allowed` |
 | 409 | 충돌 | `version_conflict`, `idempotency_key_mismatch`, `request_in_progress` |
 | 413 | 본문 크기 초과 | `payload_too_large` |
-| 415 | 받을 수 없는 본문 형식 | `unsupported_media_type` |
+| 415 | 받을 수 없는 본문 형식 | `unsupported_media_type`, `schema_mismatch` |
 | 422 | 도메인 규칙 위반 | 도메인이 정한 `code` (위 행에 해당하지 않는 도메인 오류의 기본 상태) |
 | 429 | 속도 제한 | `rate_limited` (`Retry-After` 필수) |
 | 500 | 서버 오류 | `internal_error` |
@@ -82,4 +82,4 @@
 
 ## 8. 속도 제한
 
-- 속도 제한을 두는 경우 제한이 걸린 범위의 모든 응답에 헤더 `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset`(`Reset`은 리셋까지 남은 초 단위 정수, delta-seconds)을 싣습니다. 수치는 구현이 정합니다.
+- 속도 제한을 두는 경우 제한을 적용한 요청의 응답에 헤더 `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset`(`Reset`은 리셋까지 남은 초 단위 정수, delta-seconds)을 싣습니다. 수치는 구현이 정합니다.
