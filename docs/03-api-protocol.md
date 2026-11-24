@@ -31,24 +31,30 @@
 - 인증 방식은 클라이언트 종류에 맞춰 고르되, 자격 증명을 URL에 싣지 않습니다.
 - 브라우저처럼 자격 증명이 자동 전송되는 클라이언트는 상태를 바꾸는 요청(POST/PATCH/DELETE)에 **CSRF 방어**를 둡니다. 세션 쿠키는 HttpOnly·Secure·SameSite를 설정하고, 세션 생성·조회 응답 본문으로 내려준 CSRF 토큰을 클라이언트가 `X-CSRF-Token` 헤더로 보내 검증합니다.
 - 토큰 방식은 범위(scope)를 제한하고 개별 폐기가 가능해야 하며, 클라이언트는 이를 보안 저장소에 보관합니다.
+- 세션 식별자, CSRF 토큰, 리프레시 토큰은 [02-core-contracts](02-core-contracts.md) §6의 자격 증명 값 규칙을 따릅니다. 세션 식별자는 CSPRNG로 만들고 엔트로피는 64비트 이상이어야 합니다(OWASP Session Management Cheat Sheet, 2026-11-24 확인: https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html). 실제 길이는 구현이 정하고 문서화합니다.
 - 권한 검사와 철회 원칙은 [02-core-contracts](02-core-contracts.md) §6을 따릅니다.
 - CORS는 허용한 Origin만 엽니다. `*`는 쓰지 않습니다. 크로스 서브도메인/크로스 오리진에서 쿠키 인증을 써야 하면 `Access-Control-Allow-Credentials: true`와 함께 정확한 Origin 화이트리스트 및 적절한 `SameSite` 정책을 명시합니다.
 
 ## 4. 응답 형식
 
 - 성공: `{ "data": ... }`. 목록은 `{ "data": [...], "page": { "nextCursor": ..., "hasMore": ... } }`.
-- 실패: `{ "error": { "code": "...", "message": "...", "details": { } } }`.
+- 실패: `{ "error": { "code": "...", "message": "...", "details": { }, "requestId": "..." } }`.
 - `code`는 `snake_case`의 안정된 문자열이며 클라이언트는 이 값으로 분기합니다. `message`는 사람용이라 파싱하지 않습니다.
 - HTTP 상태 코드와 `code`를 함께 씁니다. 상태 코드만으로 의미를 전달하지 않습니다.
-- 서버 오류 응답에는 상관관계 ID(`requestId`)를 포함합니다.
+- 모든 오류 응답은 상태 코드와 무관하게 `error.requestId`에 상관관계 ID를 싣습니다.
+- 재시도해도 되는 오류에는 `Retry-After`를 붙입니다. 클라이언트는 이 헤더의 유무로 재시도 가능 여부를 판단합니다.
 
 | HTTP | 분류 | `code` 규칙 |
 |---|---|---|
 | 400 | 요청 형식 오류 | `invalid_request` |
 | 401 | 인증 없음·만료 | `unauthenticated` |
-| 403 | 권한 없음 | `forbidden` |
-| 404 | 없음 | `<대상>_not_found` |
+| 403 | 권한 없음 | `forbidden`, `csrf_token_invalid` |
+| 404 | 없음 | `<대상>_not_found`, `route_not_found` |
+| 405 | 허용하지 않는 메서드 | `method_not_allowed` |
 | 409 | 충돌 | `version_conflict`, `idempotency_key_mismatch`, `request_in_progress` |
+| 413 | 본문 크기 초과 | `payload_too_large` |
+| 415 | 받을 수 없는 본문 형식 | `unsupported_media_type` |
+| 422 | 도메인 규칙 위반 | 도메인이 정한 `code` (위 행에 해당하지 않는 도메인 오류의 기본 상태) |
 | 429 | 속도 제한 | `rate_limited` (`Retry-After` 필수) |
 | 500 | 서버 오류 | `internal_error` |
 | 503 | 일시적 인프라 장애 | `service_unavailable` (재시도 가능하면 `Retry-After`. RFC 9110 §15.6.4, 2026-11-24 확인: https://www.rfc-editor.org/rfc/rfc9110.html) |
@@ -64,6 +70,7 @@
   - 같은 키와 같은 본문의 재요청은 부수효과를 반복하지 않고 처음 응답을 돌려줍니다.
   - 같은 키에 다른 본문이 오면 `409 idempotency_key_mismatch`입니다.
   - 같은 키 요청이 처리 중이면 `409 request_in_progress`와 `Retry-After`를 돌려줍니다.
+  - 멱등 키 조회와 응답 재사용은 인증·권한 검사 뒤에 수행하고, 키의 범위에는 인증 주체와 대상(메서드, 경로)을 포함합니다([02-core-contracts](02-core-contracts.md) §6).
 - 수정이 필요한 대상은 `version`(정수)을 가지고, 수정 요청 본문에 기대 버전(`expectedVersion`)을 함께 보내 서버의 현재 버전과 다르면 `409 version_conflict`입니다(낙관적 잠금).
 
 ## 7. 버전닝
@@ -75,4 +82,4 @@
 
 ## 8. 속도 제한
 
-- 속도 제한을 두는 경우 응답 헤더 `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset`(`Reset`은 리셋까지 남은 초 단위 정수, delta-seconds)을 제공합니다. 수치는 구현이 정합니다.
+- 속도 제한을 두는 경우 제한이 걸린 범위의 모든 응답에 헤더 `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset`(`Reset`은 리셋까지 남은 초 단위 정수, delta-seconds)을 싣습니다. 수치는 구현이 정합니다.
