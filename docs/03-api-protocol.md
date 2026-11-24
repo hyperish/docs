@@ -1,6 +1,6 @@
 # 03. HTTP/JSON 어댑터 규약
 
-> 상태: **제안** · 기준일: 2026-11-19
+> 상태: **제안** · 기준일: 2026-11-24
 
 외부 호환 어댑터 중 **HTTP/JSON 어댑터를 채택하는 경우** 그 어댑터가 따르는 공통 규약입니다. 외부 호환이 반드시 HTTP/JSON인 것은 아닙니다. 코어·내부 규약 모델은 표준보다 성능과 수직 통합 생산성을 우선하는 스택을 쓰고([00-vision](00-vision.md)의 규약 모델 원칙), 외부 호환은 개별 어댑터로 해결하며, 이 문서는 그 어댑터 중 하나의 규약 제안입니다. 어댑터의 공통 계약은 [02-core-contracts](02-core-contracts.md) §5~§7을 따릅니다.
 
@@ -51,6 +51,7 @@
 | 409 | 충돌 | `version_conflict`, `idempotency_key_mismatch`, `request_in_progress` |
 | 429 | 속도 제한 | `rate_limited` (`Retry-After` 필수) |
 | 500 | 서버 오류 | `internal_error` |
+| 503 | 일시적 인프라 장애 | `service_unavailable` (재시도 가능하면 `Retry-After`. RFC 9110 §15.6.4, 2026-11-24 확인: https://www.rfc-editor.org/rfc/rfc9110.html) |
 
 ## 5. 페이지네이션
 
