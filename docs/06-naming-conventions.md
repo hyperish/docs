@@ -1,6 +1,6 @@
 # 06. 네이밍·코딩 컨벤션
 
-> 상태: **제안** · 기준일: 2026-11-19
+> 상태: **제안** · 기준일: 2026-11-24
 
 코드, API, DB, 문서 전반의 이름 규칙입니다. 개발 절차 규칙은 [개발 규칙](05-development-rules.md)을 봅니다. API·DB·메시지 명명 규칙은 언어와 무관하게 적용하고, 코드 규칙은 Rust(§3, 코어 전략상 기본)와 TypeScript(§4, 사용하는 레포)로 나눕니다.
 
@@ -25,7 +25,7 @@
 | TypeScript 클래스·컴포넌트·타입 | PascalCase | `ParseError` |
 | TypeScript 함수·변수·메서드 | camelCase | `loadConfig` |
 | 상수 (TS) | SCREAMING_SNAKE_CASE | `MAX_RETRIES` |
-| 환경 변수 | SCREAMING_SNAKE_CASE, 접두어 | `HYPERISH_LOG_LEVEL` |
+| 환경 변수 | SCREAMING_SNAKE_CASE. 프레임워크가 읽는 변수는 `HYPERISH_` 접두어, 앱 설정 변수는 앱이 정한 접두어 | `HYPERISH_LOG_LEVEL` |
 | API JSON 필드 | camelCase | `createdAt` |
 | API URL 경로 | 소문자 kebab-case, 복수형 리소스 | `/v1/things` |
 | API 에러 코드 | snake_case | `thing_not_found` |
