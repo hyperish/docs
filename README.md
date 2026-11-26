@@ -33,7 +33,7 @@
 | 04 | [실시간 통신 어댑터 규약](docs/04-realtime-communication.md) | WebSocket 어댑터를 채택할 때의 연결·메시지·재연결 규칙 |
 | 05 | [개발 규칙](docs/05-development-rules.md) | 브랜치, 커밋, PR, 버전닝, 포크 운영 |
 | 06 | [네이밍·코딩 컨벤션](docs/06-naming-conventions.md) | 파일, 코드, API, DB 네이밍 규칙 |
-| 07 | [열린 결정](docs/07-open-questions.md) | 공통 미정 사항, 결정 기록(레포 문서 확정 사항의 색인 포함) |
+| 07 | [결정 기록](docs/07-open-questions.md) | 공통 결정과 각 레포가 소유한 계약의 색인 |
 
 ## 문서를 바꾸는 법
 
