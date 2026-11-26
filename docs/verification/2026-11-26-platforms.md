@@ -4,6 +4,20 @@
 
 같은 파일 해시로 확인한 공개 저장소의 소스도 커밋별로 조회할 수 있다. [Hyve 소스](https://github.com/hyperish/hyve/tree/ab3b833cdf5bfd5ea32d5f20b92fc198447d70d8) · [Orbic 소스](https://github.com/hyperish/orbic/tree/d606b1a03405d83c4ac086c58d8d8c2434237474) · [Serge 소스](https://github.com/hyperish/serge/tree/d58cdedd6fc7aa71c1532b3c2e709819d9e70ba8)
 
+## 공개 저장소의 병합 검증
+
+Hyve의 `main`에서 레지스트리 의존성과 형제 저장소 소스로 각각 새 풀스택 앱을 만들었다. 두 앱에서 `hyve test`만 실행해 노트 생성, 빈 본문 거부와 DB 무변경, 목록 조회를 확인했다. Orbic의 `main`에서는 PostgreSQL·Valkey를 연결한 통합 테스트와 공개 크레이트 패키징이 통과했다. [Hyve 실행](https://github.com/hyperish/hyve/actions/runs/45749159133) · [Orbic 실행](https://github.com/hyperish/orbic/actions/runs/45748278292)
+
+Opale은 3D 뷰포트의 명세와 구현 계획을 병합했다. 해당 커밋에서 기존 스캐폴드의 포맷 검사, Clippy와 테스트가 통과했다. [Opale 실행](https://github.com/hyperish/opale/actions/runs/45743674469)
+
+로컬 Pixel 6 에뮬레이터에서는 상태 표시줄과 카메라 컷아웃이 상단 128px을 차지했다. 첫 링크의 중앙은 83px에 있어 터치를 받지 못했다. Android가 보고한 안전 영역을 적용한 뒤 중앙이 211px로 이동했고 한 번 터치해 화면을 열 수 있었다. Pixel 6와 Pixel Fold 모두 키보드로 입력한 제목 전체가 화면에 나타난 뒤 저장을 눌렀고, SQLite의 소유자와 제목이 화면의 프로젝트와 일치했다. 인메모리 세션을 쓰는 서버를 재시작한 뒤, 두 번째 저장은 거부됐고 DB에는 첫 프로젝트만 남았다. Pixel Fold의 힌지를 180도에서 90도로 바꾸자 AndroidX는 반쯤 접힌 상태를, NDK 센서는 90도를 보고했다. [Pixel 6 실행](https://github.com/hyperish/serge/actions/runs/45765716844/job/139734629846) · [Pixel Fold 실행](https://github.com/hyperish/serge/actions/runs/45765716844/job/139734572676)
+
+Hyve·Orbic·Serge의 병합된 `main`을 함께 체크아웃한 macOS에서 Chrome 158로 프로젝트를 저장했다. 로그인 후 저장한 제목이 화면과 별도로 연 SQLite 연결에서 일치했다. 브라우저의 세션 쿠키를 지우자 서버가 두 번째 저장을 거부했고 DB에는 첫 프로젝트만 남았다. iPhone 시뮬레이터에서는 별도의 UIKit 앱에서 버튼을 눌러 수신 앱을 열었다. JSON과 WASM/rkyv에서 각 경로에 고유한 프로젝트 URL이 앱 델리게이트에 그대로 전달됐다. [Chrome 실행](https://github.com/hyperish/serge/actions/runs/45765716844/job/139734571185) · [iOS WKWebView 실행](https://github.com/hyperish/serge/actions/runs/45765716844/job/139734621261)
+
+Serge의 `main`에서 8개 CI 작업이 모두 통과했다. iOS 시스템 UI 검사에서는 단축어가 복사한 JSON을 시스템 클립보드에서 직접 읽어 제목 `Saved project`와 진행률 0.75를 대조했다. 홈 화면과 잠금 화면의 위젯 배치도 확인했다. [iOS 시스템 UI 실행](https://github.com/hyperish/serge/actions/runs/45765716844/job/139734573336) · [Serge 전체 실행](https://github.com/hyperish/serge/actions/runs/45765716844)
+
+병합 직후 Linux 검사에서는 Weston의 XWayland 메뉴를 클릭한 뒤 응답을 기다리다 시간 초과됐다. Linux ARM64에서 동일한 메뉴 조작을 세 번 반복해 메뉴 막대와 우클릭 메뉴가 명령을 전달하는지 확인했다. 같은 병합 커밋의 공개 Linux 검사도 재실행에서 통과했다. [첫 실행](https://github.com/hyperish/serge/actions/runs/45765716844/job/139726023228) · [Linux 재실행](https://github.com/hyperish/serge/actions/runs/45765716844/job/139734570126)
+
 ## 앱과 서버
 
 | 환경 | 관찰한 결과 |
