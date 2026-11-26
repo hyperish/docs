@@ -2,6 +2,8 @@
 
 기준 명세는 `hyperish/docs@a9045284fe8b11d2a2213ea42b29839bf493ab9e`다. 변경 중인 세 저장소의 소스를 비공개 검증 저장소에 복사해 Windows와 Xcode에서 실행했다. 플랫폼별 링크는 해당 테스트가 실행된 커밋을 가리킨다. [소스 기준 커밋과 파일 해시](https://github.com/hyperish/framework-acceptance-20261126-0949/blob/21cd8778c91f8f6b33f7421b54f01ac0fd60d964/verification/sources.json)
 
+같은 파일 해시로 확인한 공개 저장소의 소스도 커밋별로 조회할 수 있다. [Hyve 소스](https://github.com/hyperish/hyve/tree/ab3b833cdf5bfd5ea32d5f20b92fc198447d70d8) · [Orbic 소스](https://github.com/hyperish/orbic/tree/d606b1a03405d83c4ac086c58d8d8c2434237474) · [Serge 소스](https://github.com/hyperish/serge/tree/d58cdedd6fc7aa71c1532b3c2e709819d9e70ba8)
+
 ## 앱과 서버
 
 | 환경 | 관찰한 결과 |
